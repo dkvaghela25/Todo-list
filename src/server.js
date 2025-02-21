@@ -2,7 +2,8 @@ const express = require('express')
 const cors = require('cors');
 const multer = require('multer');
 const bcrypt = require('bcryptjs');
-var jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
+const { jwtDecode } = require('jwt-decode');
 const { validate_user } = require('./middleware/validate')
 const { client, connect } = require('./database/index')
 
@@ -27,13 +28,9 @@ app.get('/health', function (req, res) {
 });
 
 app.get('/users', async (req, res) => {
-    const result = await client.query({
-        text: 'SELECT * FROM public.users;',
-        rowMode: 'array',
-    });
+    const result = await client.query('SELECT * FROM public.users;');
 
-    console.log(result.rows.join(' ').split(' '))
-    res.send(result.rows.join(' ').split(' '))
+    res.send(result.rows)
 })
 
 app.post('/users/register', async (req, res) => {
@@ -107,9 +104,9 @@ app.post('/users/login', upload.none(), async (req, res) => {
 
         if (match_password) {
 
-            let json = { "usename": username, "password": input_password }
+            let json = { "username": username, "password": input_password }
 
-            let jwtToken = jwt.sign(json, process.env.JWT_SECRET);
+            let jwtToken = jwt.sign(json, process.env.JWT_SECRET,{ expiresIn: 60 });
 
             res.status(200).send(jwtToken);
 
@@ -121,8 +118,33 @@ app.post('/users/login', upload.none(), async (req, res) => {
 
 })
 
+app.patch('/users/update',upload.none(), async (req, res) => {
+    let header = req.headers.authorization
+    let token = header.split(' ')[1]
 
+    let username = jwtDecode(token).username;
+
+    let change_in = Object.keys(req.body);
+
+    let user = await client.query({
+        text: 'SELECT * FROM public.users where username = $1;',
+        rowMode: 'array',
+    },[username]);
+
+    let user_id = user.rows[0][0]
+
+    change_in.forEach(element => {
+        let query = `UPDATE public.users SET ${element} = $1 WHERE user_id = $2;`
+        console.log(element)
+        console.log(req.body[element])
+        client.query(query,[req.body[element],user_id])
+    });
+
+    res.send(200)
+
+})
 
 app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}/`)
 })
+
