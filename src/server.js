@@ -36,6 +36,14 @@ app.get('/users', async (req, res) => {
 
 app.post('/users/register', async (req, res) => {
 
+    if(!req.body.username){
+        res.send('Enter username')
+    }
+
+    if(!req.body.password){
+        res.send('Enter password')
+    }
+
     let users = await client.query({
         text: 'SELECT username FROM public.users;',
         rowMode: 'array',
@@ -60,6 +68,7 @@ app.post('/users/register', async (req, res) => {
     }
 
 })
+
 
 
 
