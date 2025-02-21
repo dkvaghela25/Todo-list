@@ -2,6 +2,7 @@ const express = require('express')
 const cors = require('cors');
 const multer = require('multer');
 const bcrypt = require('bcryptjs');
+var jwt = require('jsonwebtoken');
 const { validate_user } = require('./middleware/validate')
 const { client, connect } = require('./database/index')
 
@@ -20,6 +21,7 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use('/users/register', upload.none(), validate_user)
 
+
 app.get('/health', function (req, res) {
     return res.send('Ok, Working fine.');
 });
@@ -36,11 +38,11 @@ app.get('/users', async (req, res) => {
 
 app.post('/users/register', async (req, res) => {
 
-    if(!req.body.username){
+    if (!req.body.username) {
         res.send('Enter username')
     }
 
-    if(!req.body.password){
+    if (!req.body.password) {
         res.send('Enter password')
     }
 
@@ -52,7 +54,7 @@ app.post('/users/register', async (req, res) => {
     users = users.rows.join(' ').split(' ')
 
     if (users.includes(req.body.username)) {
-        res.send('Username not available')
+        res.send('Username is already taken ')
     }
     else {
 
@@ -69,7 +71,55 @@ app.post('/users/register', async (req, res) => {
 
 })
 
+app.post('/users/login', upload.none(), async (req, res) => {
 
+    if (!req.body.username) {
+        res.send('Enter username')
+    }
+
+    if (!req.body.password) {
+        res.send('Enter password')
+    }
+
+    let users = await client.query({
+        text: 'SELECT username FROM public.users;',
+        rowMode: 'array',
+    });
+
+    users = users.rows.join(' ').split(' ')
+
+    if (!users.includes(req.body.username)) {
+        res.send('Username is not available please register first')
+    }
+    else {
+        let username = req.body.username;
+        let input_password = req.body.password;
+
+        let user = await client.query({
+            text: `SELECT username,password FROM public.users where username = $1;`,
+            rowMode: 'array',
+        }, [username]);
+
+        var stored_password = user.rows[0][1]
+        console.log(stored_password)
+
+        let match_password = await bcrypt.compare(input_password, stored_password)
+
+        if (match_password) {
+
+            let json = { "usename": username, "password": input_password }
+
+            let jwtToken = jwt.sign(json, process.env.JWT_SECRET);
+
+            res.status(200).send(jwtToken);
+
+        } else {
+            res.send("Wrong Password")
+        }
+
+    }
+
+})
 
 
 
