@@ -1,15 +1,15 @@
 const express = require('express')
 const cors = require('cors');
 const multer = require('multer');
+const dotenv = require('dotenv');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const validator = require("email-validator");
-const { jwtDecode } = require('jwt-decode');
 const { validate_user } = require('./middleware/validate')
 const { client, connect } = require('./database/index')
 const { getUsers } = require('./helper/methods')
+const { verifyToken } = require('./helper/jwtHelper');
 
-const dotenv = require('dotenv');
 dotenv.config()
 
 const app = express();
@@ -101,7 +101,7 @@ app.post('/users/login', upload.none(), async (req, res) => {
 
             let json = { "user_id": user_id }
 
-            let jwtToken = jwt.sign(json, process.env.JWT_SECRET, { expiresIn: 60 });
+            let jwtToken = jwt.sign(json, process.env.JWT_SECRET, { expiresIn: 3600 });
 
             res.status(200).send(jwtToken);
 
@@ -114,11 +114,8 @@ app.post('/users/login', upload.none(), async (req, res) => {
 })
 
 app.patch('/users/update', upload.none(), async (req, res) => {
-    let header = req.headers.authorization
-    let token = header.split(' ')[1]
-    let decodedToken = jwtDecode(token);
 
-    console.log(decodedToken);
+    var decodedToken = verifyToken(req.headers.authorization);
 
     let user_id = decodedToken.user_id;
 
@@ -131,7 +128,7 @@ app.patch('/users/update', upload.none(), async (req, res) => {
         if (element == 'email') {
             var valid_email = validator.validate(req.body.email);
 
-            if(valid_email == false){
+            if (valid_email == false) {
                 res.send('Check Email ID')
             }
         }
@@ -139,7 +136,7 @@ app.patch('/users/update', upload.none(), async (req, res) => {
         if (element == 'phone_no') {
             var valid_phone_no = phone(req, body.phone_no, { country: 'IND' });
 
-            if(valid_phone_no == false){
+            if (valid_phone_no == false) {
                 res.send('Check Phone No')
             }
         }
