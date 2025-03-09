@@ -3,6 +3,7 @@ const cors = require('cors');
 const multer = require('multer');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const validator = require("email-validator");
 const { jwtDecode } = require('jwt-decode');
 const { validate_user } = require('./middleware/validate')
 const { client, connect } = require('./database/index')
@@ -121,8 +122,22 @@ app.patch('/users/update',upload.none(), async (req, res) => {
     let change_in = Object.keys(req.body);
 
     change_in.forEach(element => {
-        let query = `UPDATE public.users SET ${element} = $1 WHERE user_id = $2;`
-        client.query(query,[req.body[element],user_id])
+
+        if(element == 'email'){
+            var valid_email = validator.validate(req.body.email);
+        }
+
+        if(element == 'phone_no'){
+            var valid_phone_no = phone(req,body.phone_no, {country: 'IND'});
+        }
+
+        if(valid_email && valid_phone_no && true){
+            let query = `UPDATE public.users SET ${element} = $1 WHERE user_id = $2;`
+            client.query(query,[req.body[element],user_id])
+        } else {
+            res.send('Check your email id or phone no')
+        }
+
     });
 
     res.send(200)
@@ -130,7 +145,7 @@ app.patch('/users/update',upload.none(), async (req, res) => {
 })
 
 app.post('/users/logout' , async(req,res) => {
-
+    
 })
 
 app.listen(port, () => {
