@@ -93,18 +93,19 @@ app.post('/users/login', upload.none(), async (req, res) => {
         let input_password = req.body.password;
 
         let user = await client.query({
-            text: `SELECT username,password FROM public.users where username = $1;`,
-            rowMode: 'array',
+            text: `SELECT user_id,username,password FROM public.users where username = $1;`,
         }, [username]);
 
-        var stored_password = user.rows[0][1]
-        console.log(stored_password)
+        console.log(user.rows)
+
+        var stored_password = user.rows[0].password
+        let user_id = user.rows[0].user_id
 
         let match_password = await bcrypt.compare(input_password, stored_password)
 
         if (match_password) {
 
-            let json = { "username": username, "password": input_password }
+            let json = { "user_id": user_id }
 
             let jwtToken = jwt.sign(json, process.env.JWT_SECRET,{ expiresIn: 60 });
 
@@ -141,6 +142,10 @@ app.patch('/users/update',upload.none(), async (req, res) => {
     });
 
     res.send(200)
+
+})
+
+app.post('/users/logout' , async(req,res) => {
 
 })
 
