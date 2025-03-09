@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 const { jwtDecode } = require('jwt-decode');
 const { validate_user } = require('./middleware/validate')
 const { client, connect } = require('./database/index')
+const {getUsers} = require('./helper/methods')
 
 const dotenv = require('dotenv');
 dotenv.config()
@@ -43,12 +44,9 @@ app.post('/users/register', async (req, res) => {
         res.send('Enter password')
     }
 
-    let users = await client.query({
-        text: 'SELECT username FROM public.users;',
-        rowMode: 'array',
-    });
+    let users = await getUsers();
 
-    users = users.rows.join(' ').split(' ')
+    console.log(users)
 
     if (users.includes(req.body.username)) {
         res.send('Username is already taken ')
@@ -78,12 +76,7 @@ app.post('/users/login', upload.none(), async (req, res) => {
         res.send('Enter password')
     }
 
-    let users = await client.query({
-        text: 'SELECT username FROM public.users;',
-        rowMode: 'array',
-    });
-
-    users = users.rows.join(' ').split(' ')
+    let users = await getUsers();
 
     if (!users.includes(req.body.username)) {
         res.send('Username is not available please register first')
@@ -123,21 +116,12 @@ app.patch('/users/update',upload.none(), async (req, res) => {
     let header = req.headers.authorization
     let token = header.split(' ')[1]
 
-    let username = jwtDecode(token).username;
+    let user_id = jwtDecode(token).user_id;
 
     let change_in = Object.keys(req.body);
 
-    let user = await client.query({
-        text: 'SELECT * FROM public.users where username = $1;',
-        rowMode: 'array',
-    },[username]);
-
-    let user_id = user.rows[0][0]
-
     change_in.forEach(element => {
         let query = `UPDATE public.users SET ${element} = $1 WHERE user_id = $2;`
-        console.log(element)
-        console.log(req.body[element])
         client.query(query,[req.body[element],user_id])
     });
 
