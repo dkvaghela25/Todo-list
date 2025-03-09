@@ -9,20 +9,22 @@ const { validate_user } = require('./middleware/validate')
 const { client, connect } = require('./database/index')
 const { getUsers } = require('./helper/methods')
 const { verifyToken } = require('./helper/jwtHelper');
+const { tokenBlacklist } = require('./helper/constants');
 
 dotenv.config()
 
 const app = express();
 const port = process.env.PORT;
 const upload = multer();
+// const tokenBlacklist = [];
 
 connect();
 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-
 app.use('/users/register', upload.none(), validate_user)
+
 
 
 app.get('/health', function (req, res) {
@@ -117,6 +119,10 @@ app.patch('/users/update', upload.none(), async (req, res) => {
 
     var decodedToken = verifyToken(req.headers.authorization);
 
+    if(decodedToken instanceof Error){
+        res.send(decodedToken.message)
+    }
+
     let user_id = decodedToken.user_id;
 
     let change_in = Object.keys(req.body);
@@ -154,12 +160,17 @@ app.patch('/users/update', upload.none(), async (req, res) => {
         client.query(query, [req.body[element], user_id])
     });
 
-    res.send(200)
+    res.sendStatus(200)
 
 })
 
 app.post('/users/logout', async (req, res) => {
+    let token = req.headers.authorization.split(' ')[1];
+    console.log(token)
+    tokenBlacklist.push(token)
+    console.log(tokenBlacklist)
 
+    res.send("User Logged out successfully")
 })
 
 app.listen(port, () => {
