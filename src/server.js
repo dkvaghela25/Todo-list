@@ -7,7 +7,7 @@ const validator = require("email-validator");
 const { jwtDecode } = require('jwt-decode');
 const { validate_user } = require('./middleware/validate')
 const { client, connect } = require('./database/index')
-const {getUsers} = require('./helper/methods')
+const { getUsers } = require('./helper/methods')
 
 const dotenv = require('dotenv');
 dotenv.config()
@@ -101,7 +101,7 @@ app.post('/users/login', upload.none(), async (req, res) => {
 
             let json = { "user_id": user_id }
 
-            let jwtToken = jwt.sign(json, process.env.JWT_SECRET,{ expiresIn: 60 });
+            let jwtToken = jwt.sign(json, process.env.JWT_SECRET, { expiresIn: 60 });
 
             res.status(200).send(jwtToken);
 
@@ -113,39 +113,56 @@ app.post('/users/login', upload.none(), async (req, res) => {
 
 })
 
-app.patch('/users/update',upload.none(), async (req, res) => {
+app.patch('/users/update', upload.none(), async (req, res) => {
     let header = req.headers.authorization
     let token = header.split(' ')[1]
+    let decodedToken = jwtDecode(token);
 
-    let user_id = jwtDecode(token).user_id;
+    console.log(decodedToken);
+
+    let user_id = decodedToken.user_id;
 
     let change_in = Object.keys(req.body);
 
+    let users = await getUsers();
+
     change_in.forEach(element => {
 
-        if(element == 'email'){
+        if (element == 'email') {
             var valid_email = validator.validate(req.body.email);
+
+            if(valid_email == false){
+                res.send('Check Email ID')
+            }
         }
 
-        if(element == 'phone_no'){
-            var valid_phone_no = phone(req,body.phone_no, {country: 'IND'});
+        if (element == 'phone_no') {
+            var valid_phone_no = phone(req, body.phone_no, { country: 'IND' });
+
+            if(valid_phone_no == false){
+                res.send('Check Phone No')
+            }
         }
 
-        if(valid_email && valid_phone_no && true){
-            let query = `UPDATE public.users SET ${element} = $1 WHERE user_id = $2;`
-            client.query(query,[req.body[element],user_id])
-        } else {
-            res.send('Check your email id or phone no')
+        if (element == 'username') {
+            var valid_username = users.includes(req.body.username)
+
+            if (valid_username == true) {
+                res.send('Username is already taken')
+            }
         }
 
+
+        let query = `UPDATE public.users SET ${element} = $1 WHERE user_id = $2;`
+        client.query(query, [req.body[element], user_id])
     });
 
     res.send(200)
 
 })
 
-app.post('/users/logout' , async(req,res) => {
-    
+app.post('/users/logout', async (req, res) => {
+
 })
 
 app.listen(port, () => {
