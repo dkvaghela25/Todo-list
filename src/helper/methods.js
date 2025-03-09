@@ -1,6 +1,6 @@
 const { client, connect } = require('../database/index');
 
-async function getUsers() {
+async function getUsernames() {
     let users = await client.query({
         text: 'SELECT username FROM public.users;',
         rowMode: 'array',
@@ -11,4 +11,4 @@ async function getUsers() {
     return users;
 }
 
-module.exports = { getUsers };
+module.exports = { getUsernames };
