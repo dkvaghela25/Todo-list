@@ -1,12 +1,14 @@
 const express = require('express');
 const multer = require('multer');
 const users = require('./controller/users')
+const todo = require('./controller/todo')
 
 
 
 // const { validate_user } = require('../middleware/validate')
 
 const userRouter = express.Router();
+const todoRouter = express.Router();
 const upload = multer();
 
 userRouter.use(express.urlencoded({ extended: false }));
@@ -17,6 +19,9 @@ userRouter.post('/login', upload.none(), users.loginUser)
 userRouter.patch('/update', upload.none(), users.updateUser)
 userRouter.post('/logout', users.logoutUser)
 
+todoRouter.post('/create', upload.none() , todo.createTodo)
+
 module.exports = {
-    userRouter
+    userRouter,
+    todoRouter
 }

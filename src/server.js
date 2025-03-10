@@ -4,7 +4,7 @@ const multer = require('multer');
 const dotenv = require('dotenv');
 const { validate_user } = require('./middleware/validate')
 const { connect } = require('./database/index')
-const { userRouter } = require('./api/index')
+const { userRouter,todoRouter } = require('./api/index')
 
 dotenv.config()
 
@@ -27,6 +27,8 @@ app.get('/health', function (req, res) {
 });
 
 app.use('/users' , userRouter)
+app.use('/todo' , todoRouter)
+
 
 app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}/`)
