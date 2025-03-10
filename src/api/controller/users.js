@@ -94,8 +94,8 @@ const updateUser = async (req, res) => {
 
     var decodedToken = verifyToken(req.headers.authorization);
 
-    if(decodedToken instanceof Error){
-        res.send(decodedToken.message)
+    if (decodedToken instanceof Error) {
+        return res.status(401).json({ error: decodedToken.message });
     }
 
     let user_id = decodedToken.user_id;
@@ -134,6 +134,8 @@ const updateUser = async (req, res) => {
         let query = `UPDATE public.users SET ${element} = $1 WHERE user_id = $2;`
         client.query(query, [req.body[element], user_id])
     });
+
+    res.status(200).json({ message: 'User updated successfully' });
 
     res.sendStatus(200)
 
