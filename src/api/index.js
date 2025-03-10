@@ -20,6 +20,7 @@ userRouter.patch('/update', upload.none(), users.updateUser)
 userRouter.post('/logout', users.logoutUser)
 
 todoRouter.post('/create', upload.none() , todo.createTodo)
+todoRouter.post('/update', upload.none() , todo.updateTodo)
 
 module.exports = {
     userRouter,
