@@ -19,6 +19,7 @@ userRouter.post('/login', upload.none(), users.loginUser)
 userRouter.patch('/update', upload.none(), users.updateUser)
 userRouter.post('/logout', users.logoutUser)
 
+todoRouter.get('/', todo.showTask)
 todoRouter.post('/create', upload.none() , todo.addTask)
 todoRouter.post('/update', upload.none() , todo.updateTask)
 todoRouter.delete('/delete', upload.none() , todo.deleteTask)

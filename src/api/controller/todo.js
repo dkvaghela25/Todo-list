@@ -62,8 +62,6 @@ const deleteTask = async (req,res) => {
     console.log(todo_id)
 
     let user_id = await client.query('select user_id from public.todo where todo_id = $1' , [todo_id])
-
-    console.log(user_id)
     user_id = user_id.rows[0].user_id
 
     if(user_id != decodedToken.user_id){
@@ -76,8 +74,29 @@ const deleteTask = async (req,res) => {
 
 }
 
+const showTask = async (req,res) => {
+    
+    var decodedToken = verifyToken(req.headers.authorization);
+
+    if (decodedToken instanceof Error) {
+        return res.status(401).json({ error: decodedToken.message });
+    }
+
+    let user_id = decodedToken.user_id
+
+    let tasks = await client.query('SELECT * FROM public.todo where user_id = $1;' , [user_id]);
+
+    if(tasks.rows.length == 0){
+        return res.send("No task for user")
+    }
+
+    res.send(tasks.rows)
+
+}
+
 module.exports = {
     addTask,
     updateTask,
-    deleteTask
+    deleteTask,
+    showTask
 }
