@@ -15,7 +15,7 @@ const addTask = async (req, res) => {
 
     await client.query(query, [user_id, req.body.title, req.body.description])
 
-    res.status(200).json({ message: 'Task added successfully' });
+    return res.status(200).json({ message: 'Task added successfully' });
 
 }
 
@@ -42,7 +42,7 @@ const updateTask = async (req, res) => {
         client.query(query, [req.body[element], todo_id])
     });
 
-    res.status(200).json({ message: "Task updated succesfully" });
+    return res.status(200).json({ message: "Task updated succesfully" });
 
 }
 
@@ -66,7 +66,7 @@ const deleteTask = async (req,res) => {
 
     await client.query('DELETE FROM public.todo WHERE todo_id = $1;',[todo_id])
 
-    res.status(200).json({ message: "Task deleted succesfully" });
+    return res.status(200).json({ message: "Task deleted succesfully" });
 
 }
 
