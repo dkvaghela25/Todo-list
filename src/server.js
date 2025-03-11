@@ -3,9 +3,9 @@ const cors = require('cors');
 const multer = require('multer');
 const dotenv = require('dotenv');
 const expressPino = require('express-pino-logger');
-const { validate_user } = require('./middleware/validate')
+const { validate_user } = require('./helper/validate')
 const { connect } = require('./database/index')
-const { userRouter,todoRouter } = require('./api/index')
+const { apiRouter } = require('./api/index')
 const { logging } = require('./helper/logging');
 
 dotenv.config()
@@ -28,8 +28,7 @@ app.get('/health', function (req, res) {
     return res.send('Ok, Working fine.');
 });
 
-app.use('/users' , userRouter)
-app.use('/todo' , todoRouter)
+app.use('/',apiRouter)
 
 try{
     app.listen(port, () => {
