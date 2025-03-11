@@ -1,5 +1,3 @@
-const dotenv = require('dotenv');
-const jwt = require('jsonwebtoken');
 const { client } = require('../../database/index')
 const { verifyToken } = require('../../helper/jwtHelper');
 
@@ -17,7 +15,7 @@ const addTask = async (req, res) => {
 
     await client.query(query, [user_id, req.body.title, req.body.description])
 
-    res.send('Task added successfully')
+    res.status(200).json({ message: 'Task added successfully' });
 
 }
 
@@ -30,9 +28,7 @@ const updateTask = async (req, res) => {
     }
 
     let change_in = Object.keys(req.body);
-
     let todo_id = req.body.todo_id
-
     let user_id = await client.query('select user_id from public.todo where todo_id = $1' , [todo_id])
 
     user_id = user_id.rows[0].user_id
@@ -46,7 +42,7 @@ const updateTask = async (req, res) => {
         client.query(query, [req.body[element], todo_id])
     });
 
-    res.send("Task updated succesfully")
+    res.status(200).json({ message: "Task updated succesfully" });
 
 }
 
@@ -55,7 +51,7 @@ const deleteTask = async (req,res) => {
     var decodedToken = verifyToken(req.headers.authorization);
 
     if (decodedToken instanceof Error) {
-        return res.status(401).json({ error: decodedToken.message });
+        return res.status(401).json({ error: true , message: decodedToken.message });
     }
 
     let todo_id = req.body.todo_id
@@ -70,7 +66,7 @@ const deleteTask = async (req,res) => {
 
     await client.query('DELETE FROM public.todo WHERE todo_id = $1;',[todo_id])
 
-    res.send("Task deleted succesfully")
+    res.status(200).json({ message: "Task deleted succesfully" });
 
 }
 
@@ -87,7 +83,7 @@ const showTask = async (req,res) => {
     let tasks = await client.query('SELECT * FROM public.todo where user_id = $1;' , [user_id]);
 
     if(tasks.rows.length == 0){
-        return res.send("No task for user")
+        res.status(200).json({ message: "No task for user" });
     }
 
     res.send(tasks.rows)
