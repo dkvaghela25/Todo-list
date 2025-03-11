@@ -150,10 +150,33 @@ const logoutUser = async (req, res) => {
     res.send("User Logged out successfully")
 }
 
+const deleteUser = async (req,res) => {
+    var decodedToken = verifyToken(req.headers.authorization);
+
+    if (decodedToken instanceof Error) {
+        return res.status(401).json({ error: decodedToken.message });
+    }
+
+    let user_id = decodedToken.user_id;
+
+    let tasks = await client.query('SELECT * FROM public.todo WHERE user_id = $1' , [user_id])
+
+    tasks = tasks.rows;
+
+    if(tasks.length != 0) {
+        return res.send('First remove every task from todo list')
+    } else {
+        await client.query('DELETE FROM public.users WHERE user_id = $1', [user_id])
+    }
+
+    res.send('User removed successfully')
+}
+
 module.exports = {
     getUsers,
     registerUser,
     loginUser,
     updateUser,
-    logoutUser
+    logoutUser,
+    deleteUser
 }
