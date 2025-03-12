@@ -3,13 +3,7 @@ const { verifyToken } = require('../../helper/jwtHelper');
 
 const addTask = async (req, res) => {
 
-    var decodedToken = verifyToken(req.headers.authorization);
-
-    if (decodedToken instanceof Error) {
-        return res.status(401).json({ error: decodedToken.message });
-    }
-
-    let user_id = decodedToken.user_id
+    let user_id = req.decodedToken.user_id
 
     const query = 'INSERT INTO public.todo(user_id, title, description) VALUES ($1, $2, $3)'
 
@@ -21,19 +15,13 @@ const addTask = async (req, res) => {
 
 const updateTask = async (req, res) => {
 
-    var decodedToken = verifyToken(req.headers.authorization);
-
-    if (decodedToken instanceof Error) {
-        return res.status(401).json({ error: decodedToken.message });
-    }
-
     let change_in = Object.keys(req.body);
     let todo_id = req.body.todo_id
     let user_id = await client.query('select user_id from public.todo where todo_id = $1' , [todo_id])
 
     user_id = user_id.rows[0].user_id
 
-    if(user_id != decodedToken.user_id){
+    if(user_id != req.decodedToken.user_id){
         return res.status(401).json({ error: `You can't make changes in someone else task`})
     }
 
@@ -48,19 +36,13 @@ const updateTask = async (req, res) => {
 
 const deleteTask = async (req,res) => {
 
-    var decodedToken = verifyToken(req.headers.authorization);
-
-    if (decodedToken instanceof Error) {
-        return res.status(401).json({ error: true , message: decodedToken.message });
-    }
-
     let todo_id = req.body.todo_id
     console.log(todo_id)
 
     let user_id = await client.query('select user_id from public.todo where todo_id = $1' , [todo_id])
     user_id = user_id.rows[0].user_id
 
-    if(user_id != decodedToken.user_id){
+    if(user_id != req.decodedToken.user_id){
         return res.status(401).json({ error: `You can't delete someone else task`})
     }
 
@@ -71,14 +53,8 @@ const deleteTask = async (req,res) => {
 }
 
 const showTask = async (req,res) => {
-    
-    var decodedToken = verifyToken(req.headers.authorization);
 
-    if (decodedToken instanceof Error) {
-        return res.status(401).json({ error: decodedToken.message });
-    }
-
-    let user_id = decodedToken.user_id
+    let user_id = req.decodedToken.user_id
 
     let tasks = await client.query('SELECT * FROM public.todo where user_id = $1;' , [user_id]);
 

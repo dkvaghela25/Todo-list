@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 const { tokenBlacklist } = require('./constants');
 
-function verifyToken(header) {
+function decodeToken(header) {
     try {
         let token = header.split(' ')[1];
 
@@ -28,5 +28,5 @@ function verifyToken(header) {
 }
 
 module.exports = {
-    verifyToken
+    decodeToken
 }

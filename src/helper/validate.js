@@ -14,6 +14,6 @@ exports.validate_user = (req,res,next) => {
             return res.status(200).json({ error : true , message: "Invalid Phone No." });
         }
     } else {
-        return res.status(200).json({ error : true , message: "Unvalid Email ID" });
+        return res.status(200).json({ error : true , message: "Invalid Email ID" });
     }
 }

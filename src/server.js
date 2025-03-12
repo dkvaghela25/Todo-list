@@ -3,7 +3,6 @@ const cors = require('cors');
 const multer = require('multer');
 const dotenv = require('dotenv');
 const expressPino = require('express-pino-logger');
-const { validate_user } = require('./helper/validate')
 const { connect } = require('./database/index')
 const { apiRouter } = require('./api/index')
 const { logging } = require('./helper/logging');
@@ -21,8 +20,6 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static('public'))
-
-app.use('/users/register', upload.none(), validate_user)
 
 app.get('/health', function (req, res) {
     return res.send('Ok, Working fine.');
