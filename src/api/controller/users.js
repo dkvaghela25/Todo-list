@@ -9,21 +9,21 @@ const { decodeToken } = require('../../helper/jwtHelper');
 const { tokenBlacklist } = require('../../helper/constants');
 
 const getUsers = async (req, res) => {
-    const result = await client.query('SELECT * FROM public.users;');
+
+    let user_id = req.query.user_id
+
+    const result = await client.query('SELECT * FROM public.users WHERE user_id = $1;' , [user_id]);
+
+    if( result.rows.length == 0 ){
+        return res.status(400).json({message : "Account is deleted, register again"})
+    }
 
     res.send(result.rows)
 }
 
 const updateUser = async (req, res) => {
 
-    var decodedToken = decodeToken(req.headers.authorization);
-
-    if (decodedToken instanceof Error) {
-        logging.error(decodedToken);
-        return res.status(401).json({ error: decodedToken.message });
-    }
-
-    let user_id = decodedToken.user_id;
+    let user_id = req.query.user_id
 
     let change_in = req.body;
 
@@ -69,13 +69,8 @@ const updateUser = async (req, res) => {
 }
 
 const deleteUser = async (req, res) => {
-    var decodedToken = decodeToken(req.headers.authorization);
 
-    if (decodedToken instanceof Error) {
-        return res.status(401).json({ error: true, message: decodedToken.message });
-    }
-
-    let user_id = decodedToken.user_id;
+    let user_id = req.query.user_id
 
     let tasks = await client.query('SELECT * FROM public.todo WHERE user_id = $1', [user_id])
 
