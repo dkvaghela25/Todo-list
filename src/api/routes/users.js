@@ -1,21 +1,17 @@
 const express = require('express');
 const multer = require('multer');
 const users = require('../controller/users')
-const { authToken } = require('../../middleware/authToken')
+const { verifyToken } = require('../../middleware/verifyToken')
 
-const userRouter = express.Router({mergeParams : true});
+const userRouter = express.Router();
 
 const upload = multer();
 
 userRouter.use(express.urlencoded({ extended: false }));
 
-userRouter.use('/update/:user_id',authToken)
-userRouter.use('/delete/:user_id',authToken)
-// userRouter.use('/:user_id',authToken)
-
-userRouter.get('/:user_id' , authToken, users.getUsers)
-userRouter.patch('/update/:user_id', upload.none(), users.updateUser)
-userRouter.delete('/delete/:user_id', users.deleteUser)
+userRouter.get('/' , users.getUsers)
+userRouter.patch('/update', upload.none(), users.updateUser)
+userRouter.delete('/delete', users.deleteUser)
 
 module.exports = {
     userRouter

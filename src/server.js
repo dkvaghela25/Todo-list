@@ -1,13 +1,18 @@
 const express = require('express')
 const cors = require('cors');
+const multer = require('multer');
 const dotenv = require('dotenv');
+const expressPino = require('express-pino-logger');
 const { connect } = require('./database/index')
 const { apiRouter } = require('./api/index')
+const { logging } = require('./helper/logging');
 
 dotenv.config()
 
 const app = express();
 const port = process.env.PORT;
+const upload = multer();
+const expressLogger = expressPino({ logging });
 
 connect();
 
