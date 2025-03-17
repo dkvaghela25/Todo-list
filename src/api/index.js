@@ -4,12 +4,11 @@ const { userRouter } = require('./routes/users');
 const { todoRouter } = require('./routes/todo');
 const { authRouter } = require('./routes/auth');
 
-const { verifyToken } = require('../middleware/verifyToken')
+const { authToken } = require('../middleware/authToken')
 
-const apiRouter = express.Router();
+const apiRouter = express.Router({mergeParams : true});
 
-apiRouter.use('/todo', verifyToken)
-apiRouter.use('/users', verifyToken)
+apiRouter.use('/todo', authToken)
 
 apiRouter.use('/users', userRouter)
 apiRouter.use('/todo', todoRouter)
