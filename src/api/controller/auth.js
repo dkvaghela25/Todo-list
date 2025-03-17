@@ -5,80 +5,104 @@ const { client } = require('../../database/index')
 const { getUsernames } = require('../../helper/methods')
 const { verifyToken } = require('../../helper/jwtHelper');
 const { tokenBlacklist } = require('../../helper/constants');
+const { RequestInputError } = require('../../helper/errors');
+const { validate_email, validate_phone_no } = require('../../helper/validate');
 
 const registerUser = async (req, res) => {
 
-    if (!req.body.username) {
-        return res.status(400).json({ error: true, message: 'Enter Username' });
-    }
+    try {
 
-    if (!req.body.password) {
-        return res.status(400).json({ error: true, message: 'Enter password' });
-    }
+        if (!req.body.username) {
+            throw new RequestInputError('Username is required')
+        }
 
-    let users = await getUsernames();
+        if (!req.body.password) {
+            throw new RequestInputError('Password is required')
+        }
 
-    console.log(users)
+        if (!req.body.email) {
+            throw new RequestInputError('Email ID is required')
+        }
 
-    if (users.includes(req.body.username)) {
-        return res.status(409).json({ error: true, message: 'Username is already taken ' });
-    }
-    else {
+        if (!req.body.phone_no) {
+            throw new RequestInputError('Phone No is required')
+        }
 
-        let salt = await bcrypt.genSalt(10);
-        let hashPassword = await bcrypt.hash(req.body.password, salt);
+        validate_email(req.body.email)
+        validate_phone_no(req.body.phone_no)
 
-        let insert =
-            'INSERT INTO public.users(username, password , email , phone_no) VALUES ($1, $2, $3, $4)';
-        let values = [req.body.username, hashPassword, req.body.email, req.body.phone_no];
+        let users = await getUsernames();
 
-        await client.query(insert, values);
-        res.status(200).json({ error: false, message: 'User registered successfully' });
+        console.log(users)
 
+        if (users.includes(req.body.username)) {
+            return res.status(409).json({ error: true, message: 'Username is already taken ' });
+        }
+        else {
+
+            let salt = await bcrypt.genSalt(10);
+            let hashPassword = await bcrypt.hash(req.body.password, salt);
+
+            let insert =
+                'INSERT INTO public.users(username, password , email , phone_no) VALUES ($1, $2, $3, $4)';
+            let values = [req.body.username, hashPassword, req.body.email, req.body.phone_no];
+
+            await client.query(insert, values);
+            res.status(200).json({ error: false, message: 'User registered successfully' });
+
+        }
+    } catch (err) {
+        res.status(err.error_code).json(err.response_data)
     }
 }
 
 const loginUser = async (req, res) => {
 
-    if (!req.body.username) {
-        return res.status(400).json({ error: true, message: 'Enter Username' });
-    }
+    try {
 
-    if (!req.body.password) {
-        return res.status(400).json({ error: true, message: 'Enter password' });
-
-    }
-
-    let users = await getUsernames();
-
-    if (!users.includes(req.body.username)) {
-        return res.status(400).json({ error: true, message: 'Username is not available please register' });
-    }
-    else {
-        let username = req.body.username;
-        let input_password = req.body.password;
-
-        let user = await client.query({
-            text: `SELECT user_id,username,password FROM public.users where username = $1;`,
-        }, [username]);
-
-        console.log(user.rows)
-
-        var stored_password = user.rows[0].password
-        let user_id = user.rows[0].user_id
-
-        let match_password = await bcrypt.compare(input_password, stored_password)
-
-        if (match_password) {
-
-            let json = { "user_id": user_id }
-            let jwtToken = jwt.sign(json, process.env.JWT_SECRET, { expiresIn: 3600 });
-            return res.status(200).json({ error: false, message: 'User loggedin successfully', Token: jwtToken });
-
-        } else {
-            res.status(401).json({ error: true, message: "Wrong Password" });
+        if (!req.body.username) {
+            throw new RequestInputError('Username is required')
         }
 
+        if (!req.body.password) {
+            throw new RequestInputError('Password is required')
+
+        }
+
+        let users = await getUsernames();
+
+        if (!users.includes(req.body.username)) {
+            return res.status(400).json({ error: true, message: 'Username is not available please register' });
+        }
+        else {
+            let username = req.body.username;
+            let input_password = req.body.password;
+
+            let user = await client.query({
+                text: `SELECT user_id,username,password FROM public.users where username = $1;`,
+            }, [username]);
+
+            console.log(user.rows)
+
+            var stored_password = user.rows[0].password
+            let user_id = user.rows[0].user_id
+
+            let match_password = await bcrypt.compare(input_password, stored_password)
+
+            if (match_password) {
+
+                let json = { "user_id": user_id }
+                let jwtToken = jwt.sign(json, process.env.JWT_SECRET, { expiresIn: 3600 });
+                return res.status(200).json({ error: false, message: 'User loggedin successfully', Token: jwtToken });
+
+            } else {
+                res.status(401).json({ error: true, message: "Wrong Password" });
+            }
+
+        }
+
+    } catch (err) {
+        res.status(err.error_code).json(err.response_data)
     }
 
 }

@@ -1,30 +1,20 @@
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 const { tokenBlacklist } = require('./constants');
+const { AuthenticationError } = require('./errors');
 
 function decodeToken(header) {
-    try {
-        let token = header.split(' ')[1];
 
-        console.log(tokenBlacklist);
+    let token = header.split(' ')[1];
 
-        if (tokenBlacklist.includes(token)) {
-            return new Error('Token is blacklisted, login again');
-        }
-
-        var decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-
-        return decodedToken;
-
-    } catch (err) {
-        if (err.name === 'TokenExpiredError') {
-            return new Error('Token has expired');
-        } else if (err.name === 'JsonWebTokenError') {
-            return new Error('Invalid token');
-        } else {
-            return new Error('Token verification failed');
-        }
+    if (tokenBlacklist.includes(token)) {
+        throw new AuthenticationError('Token is blacklisted, login again');
     }
+
+    var decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+
+    return decodedToken;
+
 }
 
 module.exports = {
