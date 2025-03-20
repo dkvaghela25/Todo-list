@@ -26,9 +26,7 @@ const updateTask = async (req, res) => {
 
         let change_in = Object.keys(req.body);
         let todo_id = req.params.todo_id;
-
-        console.log(todo_id)
-
+        
         let user_id = await client.query('select user_id from public.todo where todo_id = $1' , [todo_id]);
         
         if (user_id.rows.length == 0) {

@@ -7,8 +7,6 @@ const authToken = (req, res, next) => {
 
         var decodedToken = decodeToken(req.headers.authorization);
 
-        
-
         req.decodedToken = decodedToken;
 
         next();

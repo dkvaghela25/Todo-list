@@ -4,12 +4,13 @@
   "description": "This is my first project",
   "main": "./src/server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "unittest": "mocha ./src/tests/*.spec.js"
   },
   "author": "Divyang Vaghela",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^3.0.2",
+    "chai": "^5.2.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "email-validator": "^2.0.4",
@@ -28,6 +29,11 @@
     "util": "^0.12.5"
   },
   "devDependencies": {
-    "sequelize-cli": "^6.6.2"
+    "mocha": "^11.1.0",
+    "mocha-suppress-logs": "^0.5.1",
+    "sequelize-cli": "^6.6.2",
+    "supertest": "^7.0.0",
+    "chai": "^3.5.0",
+    "chai-http": "^2.0.1"
   }
 }

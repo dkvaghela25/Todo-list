@@ -23,11 +23,10 @@ app.get('/health', function (req, res) {
     return res.send('Ok, Working fine.');
 });
 
-app.use('/',apiRouter)
+app.use('/', apiRouter)
 
+app.listen(port, () => {
+    console.log(`Server running on http://localhost:${port}/`)
+})
 
-    app.listen(port, () => {
-        console.log(`Server running on http://localhost:${port}/`)
-    })
-
-
+module.exports = app;
