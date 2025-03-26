@@ -46,24 +46,24 @@ describe('👤 User Route', () => {
 
   describe('Update user details', () => {
 
-    // it('it should return User updated successfully', (done) => {
+    it('it should return User updated successfully', (done) => {
 
-    //   let formData = {
-    //     username: "Test123",
-    //     email: 'hello111@gmail.com',
-    //   }
+      let formData = {
+        username: "Test123",
+        email: 'hello111@gmail.com',
+      }
 
-    //   chai.request(server)
-    //     .patch(`/user/update/${user_id}`)
-    //     .set('Authorization', `Bearer ${global.token}`)
-    //     .send(formData)
-    //     .end((err, res) => {
-    //       assert.equal(res.status, 200);
-    //       assert.equal(res.body.message, "User updated successfully");
-    //       assert.isObject(res.body);
-    //       done();
-    //     });
-    // });
+      chai.request(server)
+        .patch(`/user/update/${user_id}`)
+        .set('Authorization', `Bearer ${global.token}`)
+        .send(formData)
+        .end((err, res) => {
+          assert.equal(res.status, 200);
+          assert.equal(res.body.message, "User updated successfully");
+          assert.isObject(res.body);
+          done();
+        });
+    });
 
     it('it should return Token has expired', (done) => {
 
@@ -189,7 +189,7 @@ describe('👤 User Route', () => {
 
   });
 
-  describe('Get user details', () => {
+  describe('Delete user details', () => {
 
     it('it should User removed successfully', (done) => {
 

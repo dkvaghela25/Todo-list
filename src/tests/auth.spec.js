@@ -24,8 +24,6 @@ describe('🔒 Authentication Route', () => {
         .post('/auth/register')
         .send(formData)
         .end((err, res) => {
-          console.log(res.body)
-          console.log(res.status)
           assert.equal(res.status, 200);
           assert.equal(res.body.message, 'User registered successfully')
           assert.isObject(res.body);
