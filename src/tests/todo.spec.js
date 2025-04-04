@@ -17,7 +17,7 @@ describe('✅ Todo Route', () => {
 
     describe('Create Task', () => {
 
-        it('it should return User details', (done) => {
+        it('Task added successfully', (done) => {
 
             let formData = {
                 title: "Todo",

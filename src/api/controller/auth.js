@@ -46,7 +46,18 @@ const registerUser = async (req, res) => {
             let values = [req.body.username, hashPassword, req.body.email, req.body.phone_no];
 
             await client.query(insert, values);
-            res.status(200).json({ error: false, message: 'User registered successfully' });
+
+            let user_id = await client.query({
+                text: 'SELECT user_id FROM public.users',
+                rowMode: 'array',
+            });
+
+            user_id = user_id.rows.join(' ').split(' ').map(id => Number(id));
+            user_id = Math.max(...user_id)
+
+            console.log(user_id)
+
+            res.status(200).json({ error: false, user_id: user_id, message: 'User registered successfully' });
 
         }
     } catch (err) {
