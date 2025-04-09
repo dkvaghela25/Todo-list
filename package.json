@@ -4,6 +4,7 @@
   "description": "This is my first project",
   "main": "./src/server.js",
   "scripts": {
+    "start": "nodemon server.js",
     "unittest": "mocha ./src/tests/*.spec.js"
   },
   "author": "Divyang Vaghela",
