@@ -1,5 +1,4 @@
 const jwt = require('jsonwebtoken');
-const dotenv = require('dotenv');
 const { tokenBlacklist } = require('./constants');
 const { AuthenticationError } = require('./errors');
 

@@ -1,31 +1,55 @@
-import React from 'react'
-import '../style.css'
-import './UserDetails.css'
+import React, { useEffect, useState } from 'react';
+import { jwtDecode } from "jwt-decode";
+import axios from 'axios';
+import '../style.css';
+import './UserDetails.css';
 
 function UserDetails() {
 
-    let data = {
-        "user_id": 89,
-        "username": "parth12",
-        "password": "tarsariya",
-        "email": "hello123@gmail.com",
-        "phone_no": "9724491234"
-    }
+    const [data, setData] = useState({});
+
+    useEffect(() => {
+        const fetchUserDetails = async () => {
+            try {
+                let token = sessionStorage.getItem('token');
+                const decodedToken = jwtDecode(token);
+                let user_id = decodedToken.user_id;
+
+                const res = await axios.get(`http://localhost:3000/user/${user_id}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
+                setData(res.data);
+            } catch (err) {
+                console.error('Error fetching user details:', err);
+            }
+        };
+
+        fetchUserDetails();
+    }, []);
 
     return (
         <div>
             <div className="container">
                 <div className='heading'>User Details</div>
                 <div className="user-details">
+                    {console.log(data)}
                     {Object.keys(data).map((key) => (
-                        <><div>{key}</div><div>:</div><div>{data[key]}</div></>
+                        <div key={key} className="user-detail-row">
+                            <div>{key}</div>
+                            <div>:</div>
+                            <div>{data[key]}</div>
+                        </div>
                     ))}
+                    
                 </div>
                 <button>Update</button>
                 <button className='delete-button'>Delete</button>
             </div>
         </div>
-    )
+    );
 }
 
-export default UserDetails
+export default UserDetails;

@@ -1,9 +1,7 @@
-const dotenv = require('dotenv');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { client } = require('../../database/index')
 const { getUsernames } = require('../../helper/methods')
-const { verifyToken } = require('../../helper/jwtHelper');
 const { tokenBlacklist } = require('../../helper/constants');
 const { RequestInputError, AuthenticationError } = require('../../helper/errors');
 const { validate_email, validate_phone_no } = require('../../helper/validate');

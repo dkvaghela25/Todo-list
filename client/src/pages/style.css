@@ -27,6 +27,7 @@ button{
     background-color: #4B7CFE;
     color: #C1D0FD;
     cursor: pointer;
+    align-self: center;
 }
 
 input{

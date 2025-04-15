@@ -1,11 +1,6 @@
-const dotenv = require('dotenv');
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const validator = require("email-validator");
 const { client } = require('../../database/index')
 const { getUsernames } = require('../../helper/methods')
-const { decodeToken } = require('../../helper/jwtHelper');
-const { tokenBlacklist } = require('../../helper/constants');
 const { AuthenticationError } = require('../../helper/errors');
 const { validate_email, validate_phone_no } = require('../../helper/validate');
 
@@ -30,6 +25,7 @@ const getUsers = async (req, res) => {
     } catch (err) {
         res.status(err.error_code).json(err.response_data)
     }
+    
 }
 
 const updateUser = async (req, res) => {
@@ -49,6 +45,7 @@ const updateUser = async (req, res) => {
         username = change_in.username
         email = change_in.email
         phone_no = change_in.phone_no
+        password = change_in.password
 
         change_in = Object.keys(req.body)
 
@@ -66,6 +63,13 @@ const updateUser = async (req, res) => {
 
         if (phone_no) {
             validate_phone_no(phone_no)
+        }
+
+        if (password) {
+            let salt = await bcrypt.genSalt(10);
+            let hashPassword = await bcrypt.hash(req.body.password, salt);
+            console.log(hashPassword)
+            req.body.password = hashPassword;
         }
 
         change_in.forEach(element => {
