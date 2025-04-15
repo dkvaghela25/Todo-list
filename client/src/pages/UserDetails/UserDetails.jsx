@@ -11,12 +11,13 @@ function UserDetails() {
     const [data, setData] = useState({});
     const navigate = useNavigate();
 
+    let token = sessionStorage.getItem('token');
+    const decodedToken = jwtDecode(token);
+    let user_id = decodedToken.user_id;
+    
     useEffect(() => {
         const fetchUserDetails = async () => {
             try {
-                let token = sessionStorage.getItem('token');
-                const decodedToken = jwtDecode(token);
-                let user_id = decodedToken.user_id;
 
                 const res = await axios.get(`http://localhost:3000/user/${user_id}`, {
                     headers: {

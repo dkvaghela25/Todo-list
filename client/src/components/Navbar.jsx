@@ -7,7 +7,8 @@ function Navbar() {
         <div>
             <header>
                 <Link to="/register"><button>Register</button></Link>
-                <Link to="/login"><button>Log In</button></Link>
+                <Link to="/login"><button>LogIn</button></Link>
+                <Link to="/logout"><button>Logout</button></Link>
             </header>
         </div>
     )

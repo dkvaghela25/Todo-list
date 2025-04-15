@@ -7,6 +7,8 @@ import UserDetails from './pages/UserDetails/UserDetails';
 import UpdateUserdetails from './pages/UpdateUserdetails/UpdateUserdetails';
 import Navbar from './components/Navbar';
 import DeleteUser from './pages/DeleteUser/DeleteUser';
+import LogoutPage from './pages/LogoutPage/LogoutPage';
+
 
 
 function App() {
@@ -14,10 +16,11 @@ function App() {
     <Router>
       <Navbar/>
       <div className="App">
-        
+
         <Routes>
           <Route path="/register" element={<RegistrationPage />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/logout" element={<LogoutPage />} />
           <Route path="/user-details" element={<UserDetails />} />
           <Route path="/update-user" element={<UpdateUserdetails />} />
           <Route path="/delete-user" element={<DeleteUser />} />

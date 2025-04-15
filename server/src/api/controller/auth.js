@@ -114,7 +114,14 @@ const loginUser = async (req, res) => {
 
 const logoutUser = async (req, res) => {
 
-    let token = req.headers.authorization.split(' ')[1];
+    console.log(req.headers)
+
+    let token = req.headers.authorization;
+    console.log(token);
+    
+    token = token.split(' ')[1];
+    console.log(token);
+    
     tokenBlacklist.push(token)
 
     return res.status(200).json({ message: "User Logged out successfully" });
