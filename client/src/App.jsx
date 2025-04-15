@@ -8,8 +8,7 @@ import UpdateUserdetails from './pages/UpdateUserdetails/UpdateUserdetails';
 import Navbar from './components/Navbar';
 import DeleteUser from './pages/DeleteUser/DeleteUser';
 import LogoutPage from './pages/LogoutPage/LogoutPage';
-
-
+import TodoList from './pages/TodoList/TodoList';
 
 function App() {
   return (
@@ -24,6 +23,7 @@ function App() {
           <Route path="/user-details" element={<UserDetails />} />
           <Route path="/update-user" element={<UpdateUserdetails />} />
           <Route path="/delete-user" element={<DeleteUser />} />
+          <Route path="/todo-list" element={<TodoList />} />
         </Routes>
 
       </div>

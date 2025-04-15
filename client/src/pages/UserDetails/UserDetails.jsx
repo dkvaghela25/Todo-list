@@ -44,6 +44,7 @@ function UserDetails() {
                 </table>
                 <button onClick={() => navigate('/update-user')}>Update</button>
                 <button className='delete-button' onClick={() => navigate('/delete-user')}>Delete</button>
+                <button onClick={() => navigate('/todo-list')}>Open Todo List</button>
             </div>
         </div>
     );
