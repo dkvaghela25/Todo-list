@@ -1,4 +1,4 @@
-.user-detail-row{
+.user-detail{
     width: 25vw;
     display: grid;
     grid-template-columns: 1fr 0.1fr 1fr;

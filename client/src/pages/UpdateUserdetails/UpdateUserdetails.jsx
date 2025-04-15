@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from "jwt-decode";
 import axios from 'axios';
 import '../style.css';
 
 function UpdateUserdetails() {
     const [formData, setFormData] = useState({});
+    const navigate = useNavigate();
 
     let token = sessionStorage.getItem('token');
     const decodedToken = jwtDecode(token);
@@ -38,14 +40,17 @@ function UpdateUserdetails() {
         e.preventDefault();
         console.log('Form data being sent:', formData);
         try {
+
+            console.log(token)
             
-            const res = await axios.patch(`http://localhost:3000/user/update/${user_id}`, {
+            const res = await axios.patch(`http://localhost:3000/user/update/${user_id}`, formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
-            }, formData);
+            });
 
             console.log('Update successful:', res.data);
+            navigate('/user-details')
         } catch (error) {
             if (error.response) {
                 console.error('Error response:', error.response.data);

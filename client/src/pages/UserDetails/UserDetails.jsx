@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { jwtDecode } from "jwt-decode";
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+
 import '../style.css';
 import './UserDetails.css';
 
 function UserDetails() {
 
     const [data, setData] = useState({});
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchUserDetails = async () => {
@@ -36,17 +39,16 @@ function UserDetails() {
                 <div className='heading'>User Details</div>
                 <div className="user-details">
                     {console.log(data)}
+                    <table>
                     {Object.keys(data).map((key) => (
-                        <div key={key} className="user-detail-row">
-                            <div>{key}</div>
-                            <div>:</div>
-                            <div>{data[key]}</div>
-                        </div>
+                        <tr>
+                            <td>{key}</td> <td>:</td> <td>{data[key]}</td>
+                        </tr>
                     ))}
-                    
+                    </table>
                 </div>
-                <button>Update</button>
-                <button className='delete-button'>Delete</button>
+                <button onClick={() => navigate('/update-user')}>Update</button>
+                <button className='delete-button' onClick={() => navigate('/delete-user')}>Delete</button>
             </div>
         </div>
     );
