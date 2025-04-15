@@ -54,3 +54,7 @@ a{
 tr{
     text-align: left;
 }
+
+.delete-button{
+    background-color: red;
+}

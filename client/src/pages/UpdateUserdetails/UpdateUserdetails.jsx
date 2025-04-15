@@ -74,13 +74,6 @@ function UpdateUserdetails() {
                     onChange={handleChange}
                 />
                 <input
-                    type="password"
-                    name="password"
-                    placeholder="Password"
-                    value={formData.password}
-                    onChange={handleChange}
-                />
-                <input
                     type="email"
                     name="email"
                     placeholder="Email"
