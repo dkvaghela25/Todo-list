@@ -1,15 +1,23 @@
 const { client } = require('../../database/index');
-const { AuthenticationError } = require('../../helper/errors');
+const { AuthenticationError, RequestInputError } = require('../../helper/errors');
 const { verifyToken } = require('../../helper/jwtHelper');
 
 const addTask = async (req, res) => {
 
     try {
 
+        if(!req.body.title){
+            throw new RequestInputError('Title is required')
+        }
+        
+        if(!req.body.description){
+            throw new RequestInputError('Description is required')
+        }
+        
         let user_id = req.decodedToken.user_id
-
+        
         const query = 'INSERT INTO public.todo(user_id, title, description) VALUES ($1, $2, $3)'
-
+        
         await client.query(query, [user_id, req.body.title, req.body.description])
 
         return res.status(200).json({ message: 'Task added successfully' });
@@ -80,7 +88,7 @@ const showTask = async (req, res) => {
         let tasks = await client.query('SELECT * FROM public.todo where user_id = $1;', [user_id]);
 
         if (tasks.rows.length == 0) {
-            res.status(200).json({ message: "No task for user" });
+            return res.status(200).json({ message: "No task for user" });
         }
 
         res.send(tasks.rows)

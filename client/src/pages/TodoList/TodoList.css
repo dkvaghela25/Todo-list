@@ -1,0 +1,37 @@
+/* Style the table container */
+table {
+    width: 80vw;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 18px;
+    text-align: left;
+    color: #fff; /* White text for dark theme */
+}
+
+/* Add a border to the table */
+table, th, td {
+    border-top: 1px solid #444; 
+    border-bottom: 1px solid #444;
+}
+
+/* Add padding to table cells */
+th, td {
+    padding: 12px;
+}
+
+/* Style the table header */
+th {
+    background-color: #333; /* Darker background for header */
+    color: #fff; /* White text */
+    font-weight: bold;
+}
+
+.tasks tr:first-child {
+    text-align: center;
+}
+
+img{
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
