@@ -12,7 +12,7 @@ function LogoutPage() {
     const decodedToken = jwtDecode(token);
     let user_id = decodedToken.user_id;
 
-    const handleSubmit = async (e) => {
+    const logout = async (e) => {
         e.preventDefault();
         try {
 
@@ -24,7 +24,8 @@ function LogoutPage() {
                 }
             });
 
-            console.log('Update Logged out successful:', res.data);
+            alert(res.data.message);
+            document.querySelector('.profile-button').hidden = true
             navigate('/login')
 
         } catch (error) {
@@ -40,7 +41,7 @@ function LogoutPage() {
     return (
         <div className="container">
             <h1>Are you sure you want to log out</h1>
-            <button onClick={handleSubmit}>Yes</button>
+            <button onClick={logout}>Yes</button>
             <button onClick={() => navigate('/user-details')}>No</button>
         </div>
     )

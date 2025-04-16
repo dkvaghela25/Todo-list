@@ -32,16 +32,24 @@ const updateTask = async (req, res) => {
 
     try {
 
+        console.log('1')
+        
         let change_in = Object.keys(req.body);
         let todo_id = req.params.todo_id;
+        console.log('2')
         
         let user_id = await client.query('select user_id from public.todo where todo_id = $1' , [todo_id]);
+        console.log('3')
         
         if (user_id.rows.length == 0) {
+            console.log('4')
             return res.status(200).json({message : 'Task not found'})
         } else if (user_id.rows[0].user_id != req.decodedToken.user_id) {
+            console.log('5')
             throw new AuthenticationError('Wrong ID')
         }
+        
+        console.log('6')
 
         change_in.forEach(element => {
             let query = `UPDATE public.todo SET ${element} = $1 WHERE todo_id = $2;`

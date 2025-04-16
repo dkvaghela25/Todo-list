@@ -9,6 +9,8 @@ import Navbar from './components/Navbar';
 import DeleteUser from './pages/DeleteUser/DeleteUser';
 import LogoutPage from './pages/LogoutPage/LogoutPage';
 import TodoList from './pages/TodoList/TodoList';
+import HomePage from './pages/HomePage/HomePage';
+
 
 function App() {
   return (
@@ -17,6 +19,7 @@ function App() {
       <div className="App">
 
         <Routes>
+          <Route path="/" element={<HomePage />} />
           <Route path="/register" element={<RegistrationPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/logout" element={<LogoutPage />} />

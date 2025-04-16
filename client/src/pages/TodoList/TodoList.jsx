@@ -4,8 +4,6 @@ import '../style.css';
 import './TodoList.css';
 import editIcon from './edit.svg';
 import deleteIcon from './delete.svg';
-import { useNavigate } from 'react-router-dom';
-
 
 function TodoList() {
 
@@ -14,9 +12,8 @@ function TodoList() {
         description: ''
     });
 
-    const [tasks, setTasks] = useState([])
-
-    const navigate = useNavigate();
+    const [tasks, setTasks] = useState([]);
+    const [todoId, setTodoId] = useState(null); 
 
     let token = sessionStorage.getItem('token');
 
@@ -41,30 +38,28 @@ function TodoList() {
         };
 
         fetchTasks();
-    },[formData]);
+    }, [formData]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
     };
 
-    const handleSubmit = async (e) => {
+    const addTask = async (e) => {
         e.preventDefault();
         console.log('Form data being sent:', formData);
         try {
-
             const res = await axios.post('http://localhost:3000/todo/create', formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             });
-            console.log('Task added successfuly:', res.data);
+            alert(res.data.message);
 
             setFormData({
                 title: '',
                 description: ''
-            })
-
+            });
         } catch (error) {
             if (error.response) {
                 console.error('Error response:', error.response.data);
@@ -76,43 +71,81 @@ function TodoList() {
     };
 
     const getTask = async (e) => {
-
-        let todo_id = e.target.className;
-        console.log(todo_id)
+        const todo_id = e.target.className; 
+        console.log(todo_id);
 
         let task = document.getElementById(todo_id);
-        console.log(task)
+        console.log(task);
 
-        let title = task.querySelector('.title').innerHTML
-        let description = task.querySelector('.description').innerHTML
+        let title = task.querySelector('.title').innerHTML;
+        let description = task.querySelector('.description').innerHTML;
 
-        console.log(title, description)
+        console.log(title, description);
 
         setFormData({
             title: title,
             description: description
-        })
+        });
 
+        setTodoId(todo_id); 
+
+        document.querySelector('.add-button').hidden = true;
+        document.querySelector('.update-button').hidden = false;
+    };
+
+    const updateTask = async (e) => {
+        e.preventDefault();
+
+        console.log('Selected todo_id:', todoId); 
+        console.log('Form data being sent:', formData);
+
+        try {
+            const res = await axios.patch(`http://localhost:3000/todo/update/${todoId}`, formData, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            alert(res.data.message);
+
+            setFormData({
+                title: '',
+                description: ''
+            });
+
+            setTodoId(null); 
+            document.querySelector('.add-button').hidden = false;
+            document.querySelector('.update-button').hidden = true;
+        } catch (error) {
+            if (error.response) {
+                console.error('Error response:', error.response.data);
+                alert(`Error: ${error.response.data.message || 'Failed to update task'}`);
+            } else {
+                console.error('Error:', error.message);
+            }
+        }
     };
 
     const deleteTask = async (e) => {
-
         try {
-
-            let todo_id = e.target.className;
-            console.log(todo_id)
+            const todo_id = e.target.className;
+            console.log(todo_id);
 
             const res = await axios.delete(`http://localhost:3000/todo/delete/${todo_id}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             });
-            console.log('Task Deleted successfuly:', res.data);
+            alert(res.data.message);
 
+            setFormData({
+                title: '',
+                description: ''
+            });
+            
         } catch (error) {
             if (error.response) {
                 console.error('Error response:', error.response.data);
-                alert(`Error: ${error.response.data.message || 'Registration failed'}`);
+                alert(`Error: ${error.response.data.message || 'Failed to delete task'}`);
             } else {
                 console.error('Error:', error.message);
             }
@@ -122,7 +155,7 @@ function TodoList() {
     return (
         <div className='container'>
             <div className='heading'>Todo List</div>
-            <form onSubmit={handleSubmit}>
+            <form>
                 <input
                     type="text"
                     name="title"
@@ -137,7 +170,8 @@ function TodoList() {
                     value={formData.description}
                     onChange={handleChange}
                 />
-                <button type="submit">Add Task</button>
+                <button className='add-button' type="submit" onClick={addTask}>Add Task</button>
+                <button className='update-button' onClick={updateTask} hidden>Update Task</button>
             </form>
             <h1>Tasks</h1>
             <table className='tasks'>
@@ -146,7 +180,7 @@ function TodoList() {
                 </tr>
 
                 {tasks.map((task) => (
-                    <tr id={task.todo_id}>
+                    <tr id={task.todo_id} key={task.todo_id}>
                         <td className='title'>{task.title}</td>
                         <td className='description'>{task.description}</td>
                         <td><img src={editIcon} className={task.todo_id} onClick={getTask} alt="Edit" /></td>

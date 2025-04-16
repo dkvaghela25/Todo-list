@@ -49,7 +49,7 @@ function UpdateUserdetails() {
                 },
             });
 
-            console.log('Update successful:', res.data);
+            alert(res.data.message);
             navigate('/user-details')
         } catch (error) {
             if (error.response) {

@@ -26,7 +26,9 @@ function DeleteUser() {
                 },
             });
 
-            console.log('Delete successful:', res.data);
+            alert(res.data.message);
+            document.querySelector('.profile-button').hidden = true
+            
             navigate('/login')
         } catch (error) {
             if (error.response) {

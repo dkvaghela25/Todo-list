@@ -22,7 +22,9 @@ function LoginPage() {
     try {
       const res = await axios.post('http://localhost:3000/auth/login', formData);
       sessionStorage.setItem("token", res.data.Token);
-      console.log('Login successful:', res.data);
+      alert(res.data.message);
+
+      document.querySelector('.profile-button').hidden = false
 
       navigate('/user-details');
     } catch (error) {

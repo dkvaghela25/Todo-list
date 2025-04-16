@@ -21,10 +21,9 @@ function RegistrationPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form data being sent:', formData);
     try {
       const res = await axios.post('http://localhost:3000/auth/register', formData);
-      console.log('Registration successful:', res.data);
+      alert(res.data.message);
 
       navigate('/login');
     } catch (error) {

@@ -43,8 +43,8 @@ function UserDetails() {
                     <tr><td><b>Phone No.</b></td> <td>:</td> <td>{data.phone_no}</td></tr>
                 </table>
                 <button onClick={() => navigate('/update-user')}>Update</button>
-                <button className='delete-button' onClick={() => navigate('/delete-user')}>Delete</button>
                 <button onClick={() => navigate('/todo-list')}>Open Todo List</button>
+                <button className='delete-button' onClick={() => navigate('/delete-user')}>Delete</button>
             </div>
         </div>
     );
