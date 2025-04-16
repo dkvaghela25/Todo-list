@@ -6,10 +6,10 @@ function Navbar() {
     return (
         <div>
             <header>
-                <Link to="/register"><button>Register</button></Link>
-                <Link to="/login"><button>LogIn</button></Link>
-                <Link to="/logout"><button>Logout</button></Link>
-                <Link to="/user-details" className='profile-button' hidden><button>Profile</button></Link>
+                <Link to="/register">Register</Link>
+                <Link to="/login">LogIn</Link>
+                <Link to="/logout" hidden>Logout</Link>
+                <Link to="/user-details" className='profile-button' hidden>Profile</Link>
             </header>
         </div>
     )
