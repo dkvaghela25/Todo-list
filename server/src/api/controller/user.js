@@ -1,4 +1,5 @@
 const bcrypt = require('bcryptjs');
+const cloudinary = require('cloudinary').v2;
 const { client } = require('../../database/index')
 const { getUsernames } = require('../../helper/methods')
 const { AuthenticationError } = require('../../helper/errors');
@@ -25,7 +26,7 @@ const getUsers = async (req, res) => {
     } catch (err) {
         res.status(err.error_code).json(err.response_data)
     }
-    
+
 }
 
 const updateUser = async (req, res) => {
@@ -68,8 +69,51 @@ const updateUser = async (req, res) => {
         if (password) {
             let salt = await bcrypt.genSalt(10);
             let hashPassword = await bcrypt.hash(req.body.password, salt);
-            console.log(hashPassword)
             req.body.password = hashPassword;
+        }
+
+        if (req.file) {
+
+            let user_id = req.params.user_id;
+
+            let image_url = await client.query('SELECT image_url FROM public.users where user_id = $1;', [user_id]);
+            image_url = image_url.rows[0].image_url
+
+            if (image_url !== 'https://res.cloudinary.com/dycqdhycj/image/upload/v1744885687/default-profile-picture_lrivmz.png') {
+
+                console.log('hello')
+
+                let public_id = image_url.split('/');
+                public_id = public_id[public_id.length - 1];
+                public_id = public_id.split('.');
+                public_id = public_id[0];
+
+
+                await cloudinary.uploader.destroy(public_id);
+
+                try {
+
+                    const result = await new Promise((resolve, reject) => {
+                        cloudinary.uploader.upload_stream({ resource_type: 'auto' }, (error, result) => {
+                            if (error) {
+                                reject(error);
+                            } else {
+                                resolve(result);
+                            }
+                        }).end(req.file.buffer);
+                    });
+                    image_url = result.secure_url;
+
+                    let query = `UPDATE public.users SET image_url = $1 WHERE user_id = $2;`
+                    await client.query(query, [image_url, user_id])
+
+                } catch (error) {
+                    console.error('Error uploading to Cloudinary:', error);
+                    throw new Error('Failed to upload image to Cloudinary');
+                }
+
+            }
+
         }
 
         change_in.forEach(element => {
@@ -80,7 +124,12 @@ const updateUser = async (req, res) => {
         res.status(200).json({ message: 'User updated successfully' });
 
     } catch (err) {
-        res.status(err.error_code).json(err.response_data)
+        console.error(err); // Log the error for debugging
+        const statusCode = err.error_code || 500; // Default to 500 if error_code is undefined
+        res.status(statusCode).json({
+            error: true,
+            message: err.response_data || 'Internal Server Error',
+        });
     }
 
 }

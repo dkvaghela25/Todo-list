@@ -10,7 +10,7 @@ const upload = multer({ storage: storage });
 
 authRouter.use(express.urlencoded({ extended: false }));
 
-authRouter.post('/register',upload.single('profile-picture'), auth.registerUser)
+authRouter.post('/register',upload.single('image'), auth.registerUser)
 authRouter.post('/login', upload.none(), auth.loginUser)
 authRouter.post('/logout', auth.logoutUser)
 

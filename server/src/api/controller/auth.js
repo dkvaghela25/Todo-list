@@ -51,21 +51,22 @@ const registerUser = async (req, res) => {
                 throw new Error('Failed to upload image to Cloudinary');
             }
         }
-                let users = await getUsernames();        
+
+        let users = await getUsernames();
         if (users.includes(req.body.username)) {
             return res.status(409).json({ error: true, message: 'Username is already taken' });
         }
         else {
-            
+
             let salt = await bcrypt.genSalt(10);
             let hashPassword = await bcrypt.hash(req.body.password, salt);
-            
+
             let insert =
-            'INSERT INTO public.users(username, password , email , phone_no, image_url) VALUES ($1, $2, $3, $4, $5)';
+                'INSERT INTO public.users(username, password , email , phone_no, image_url) VALUES ($1, $2, $3, $4, $5)';
             let values = [req.body.username, hashPassword, req.body.email, req.body.phone_no, image_url];
-            
+
             await client.query(insert, values);
-            
+
             let user_id = await client.query({
                 text: 'SELECT user_id FROM public.users',
                 rowMode: 'array',
