@@ -19,6 +19,9 @@ module.exports = {
       },
       phone_no: {
         type: Sequelize.BIGINT
+      },
+      image_url: {
+        type: Sequelize.STRING
       }
     });
   },

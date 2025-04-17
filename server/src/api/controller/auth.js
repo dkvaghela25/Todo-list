@@ -1,5 +1,6 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const cloudinary = require('cloudinary').v2;
 const { client } = require('../../database/index')
 const { getUsernames } = require('../../helper/methods')
 const { tokenBlacklist } = require('../../helper/constants');
@@ -29,22 +30,42 @@ const registerUser = async (req, res) => {
         validate_email(req.body.email)
         validate_phone_no(req.body.phone_no)
 
-        let users = await getUsernames();
+        var image_url;
 
+        if (!req.file) {
+            image_url = 'https://res.cloudinary.com/dycqdhycj/image/upload/v1744885687/default-profile-picture_lrivmz.png';
+        } else {
+            try {
+                const result = await new Promise((resolve, reject) => {
+                    cloudinary.uploader.upload_stream({ resource_type: 'auto' }, (error, result) => {
+                        if (error) {
+                            reject(error);
+                        } else {
+                            resolve(result);
+                        }
+                    }).end(req.file.buffer);
+                });
+                image_url = result.secure_url;
+            } catch (error) {
+                console.error('Error uploading to Cloudinary:', error);
+                throw new Error('Failed to upload image to Cloudinary');
+            }
+        }
+                let users = await getUsernames();        
         if (users.includes(req.body.username)) {
             return res.status(409).json({ error: true, message: 'Username is already taken' });
         }
         else {
-
+            
             let salt = await bcrypt.genSalt(10);
             let hashPassword = await bcrypt.hash(req.body.password, salt);
-
+            
             let insert =
-                'INSERT INTO public.users(username, password , email , phone_no) VALUES ($1, $2, $3, $4)';
-            let values = [req.body.username, hashPassword, req.body.email, req.body.phone_no];
-
+            'INSERT INTO public.users(username, password , email , phone_no, image_url) VALUES ($1, $2, $3, $4, $5)';
+            let values = [req.body.username, hashPassword, req.body.email, req.body.phone_no, image_url];
+            
             await client.query(insert, values);
-
+            
             let user_id = await client.query({
                 text: 'SELECT user_id FROM public.users',
                 rowMode: 'array',
@@ -59,7 +80,11 @@ const registerUser = async (req, res) => {
 
         }
     } catch (err) {
-        res.status(err.error_code).json(err.response_data)
+        console.error(err); // Log the error for debugging
+        res.status(err.error_code || 500).json({
+            error: true,
+            message: err.response_data || 'Internal Server Error',
+        });
     }
 }
 
@@ -107,7 +132,12 @@ const loginUser = async (req, res) => {
         }
 
     } catch (err) {
-        res.status(err.error_code).json(err.response_data)
+        console.error(err); // Log the error for debugging
+        const statusCode = err.error_code || 500; // Default to 500 if error_code is undefined
+        res.status(statusCode).json({
+            error: true,
+            message: err.response_data || 'Internal Server Error',
+        });
     }
 
 }
@@ -118,10 +148,10 @@ const logoutUser = async (req, res) => {
 
     let token = req.headers.authorization;
     console.log(token);
-    
+
     token = token.split(' ')[1];
     console.log(token);
-    
+
     tokenBlacklist.push(token)
 
     return res.status(200).json({ message: "User Logged out successfully" });
