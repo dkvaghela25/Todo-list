@@ -47,6 +47,8 @@ function RegistrationPage() {
       formDataWithFile.append('image', file);
     }
 
+    console.log('Form data being sent:', formDataWithFile);
+
     try {
       const res = await axios.post('http://localhost:3000/auth/register', formDataWithFile, {
         headers: {

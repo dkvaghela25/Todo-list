@@ -28,12 +28,8 @@ function LoginPage() {
 
       navigate('/user-details');
     } catch (error) {
-      if (error.response) {
-        console.error('Error response:', error.response.data);
-        alert(`Error: ${error.response.data.message || 'Login failed'}`);
-      } else {
-        console.error('Error:', error.message);
-      }
+      console.error('Error response:', error.response.data);
+      alert(`Error: ${error.response.data.message || 'Registration failed'}`);
     }
   };
 

@@ -11,6 +11,8 @@ const registerUser = async (req, res) => {
 
     try {
 
+        console.log(req.body)
+
         if (!req.body.username) {
             throw new RequestInputError('Username is required')
         }
@@ -129,12 +131,7 @@ const loginUser = async (req, res) => {
         }
 
     } catch (err) {
-        console.error(err); // Log the error for debugging
-        const statusCode = err.error_code || 500; // Default to 500 if error_code is undefined
-        res.status(statusCode).json({
-            error: true,
-            message: err.response_data || 'Internal Server Error',
-        });
+        res.status(err.error_code).json(err.response_data);
     }
 
 }

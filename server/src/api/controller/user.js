@@ -33,6 +33,8 @@ const updateUser = async (req, res) => {
 
     try {
 
+        console.log(req.body)
+
         let user_id = req.params.user_id
 
         if (user_id != req.decodedToken.user_id) {
@@ -66,17 +68,16 @@ const updateUser = async (req, res) => {
             validate_phone_no(phone_no)
         }
 
-        if (password) {
-            let salt = await bcrypt.genSalt(10);
-            let hashPassword = await bcrypt.hash(req.body.password, salt);
-            req.body.password = hashPassword;
-        }
+        var image_url;
 
-        if (req.file) {
+        if (!req.file) {
+            console.log('nulllllllllll')
+            image_url = 'https://res.cloudinary.com/dycqdhycj/image/upload/v1744885687/default-profile-picture_lrivmz.png';
+        } else {
 
             let user_id = req.params.user_id;
 
-            let image_url = await client.query('SELECT image_url FROM public.users where user_id = $1;', [user_id]);
+            image_url = await client.query('SELECT image_url FROM public.users where user_id = $1;', [user_id]);
             image_url = image_url.rows[0].image_url
 
             if (image_url !== 'https://res.cloudinary.com/dycqdhycj/image/upload/v1744885687/default-profile-picture_lrivmz.png') {
@@ -104,17 +105,18 @@ const updateUser = async (req, res) => {
                     });
                     image_url = result.secure_url;
 
-                    let query = `UPDATE public.users SET image_url = $1 WHERE user_id = $2;`
-                    await client.query(query, [image_url, user_id])
-
+                    
                 } catch (error) {
                     console.error('Error uploading to Cloudinary:', error);
                     throw new Error('Failed to upload image to Cloudinary');
                 }
-
+                
             }
-
+            
         }
+        
+        let query = `UPDATE public.users SET image_url = $1 WHERE user_id = $2;`
+        await client.query(query, [image_url, user_id])
 
         change_in.forEach(element => {
             let query = `UPDATE public.users SET ${element} = $1 WHERE user_id = $2;`
