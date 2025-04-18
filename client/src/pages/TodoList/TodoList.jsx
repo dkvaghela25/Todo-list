@@ -13,7 +13,7 @@ function TodoList() {
     });
 
     const [tasks, setTasks] = useState([]);
-    const [todoId, setTodoId] = useState(null); 
+    const [todoId, setTodoId] = useState(null);
 
     let token = sessionStorage.getItem('token');
 
@@ -71,7 +71,7 @@ function TodoList() {
     };
 
     const getTask = async (e) => {
-        const todo_id = e.target.className; 
+        const todo_id = e.target.className;
         console.log(todo_id);
 
         let task = document.getElementById(todo_id);
@@ -87,7 +87,7 @@ function TodoList() {
             description: description
         });
 
-        setTodoId(todo_id); 
+        setTodoId(todo_id);
 
         document.querySelector('.add-button').hidden = true;
         document.querySelector('.update-button').hidden = false;
@@ -96,7 +96,7 @@ function TodoList() {
     const updateTask = async (e) => {
         e.preventDefault();
 
-        console.log('Selected todo_id:', todoId); 
+        console.log('Selected todo_id:', todoId);
         console.log('Form data being sent:', formData);
 
         try {
@@ -112,7 +112,7 @@ function TodoList() {
                 description: ''
             });
 
-            setTodoId(null); 
+            setTodoId(null);
             document.querySelector('.add-button').hidden = false;
             document.querySelector('.update-button').hidden = true;
         } catch (error) {
@@ -141,7 +141,7 @@ function TodoList() {
                 title: '',
                 description: ''
             });
-            
+
         } catch (error) {
             if (error.response) {
                 console.error('Error response:', error.response.data);
@@ -153,7 +153,7 @@ function TodoList() {
     };
 
     return (
-        <div className='container'>
+        <div className='conatiner todolist_container'>
             <div className='heading'>Todo List</div>
             <form>
                 <input
@@ -173,21 +173,22 @@ function TodoList() {
                 <button className='add-button' type="submit" onClick={addTask}>Add Task</button>
                 <button className='update-button' onClick={updateTask} hidden>Update Task</button>
             </form>
-            <h1>Tasks</h1>
-            <table className='tasks'>
-                <tr>
-                    <td><b>Title</b></td><td><b>Description</b></td>
-                </tr>
-
-                {tasks.map((task) => (
-                    <tr id={task.todo_id} key={task.todo_id}>
-                        <td className='title'>{task.title}</td>
-                        <td className='description'>{task.description}</td>
-                        <td><img src={editIcon} className={task.todo_id} onClick={getTask} alt="Edit" /></td>
-                        <td><img src={deleteIcon} className={task.todo_id} onClick={deleteTask} alt="Delete" /></td>
+            <div className="tasks">
+                <h1>Tasks</h1>
+                <table>
+                    <tr>
+                        <td><b>Title</b></td><td><b>Description</b></td>
                     </tr>
-                ))}
-            </table>
+                    {tasks.map((task) => (
+                        <tr id={task.todo_id} key={task.todo_id}>
+                            <td className='title'>{task.title}</td>
+                            <td className='description'>{task.description}</td>
+                            <td><img src={editIcon} className={task.todo_id} onClick={getTask} alt="Edit" /></td>
+                            <td><img src={deleteIcon} className={task.todo_id} onClick={deleteTask} alt="Delete" /></td>
+                        </tr>
+                    ))}
+                </table>
+            </div>
         </div>
     );
 }

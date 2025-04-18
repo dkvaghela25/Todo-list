@@ -1,32 +1,42 @@
-/* Style the table container */
+.todolist_container {
+    margin-top: 15vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
 table {
     width: 80vw;
     border-collapse: collapse;
     margin: 20px 0;
     font-size: 18px;
     text-align: left;
-    color: #fff; /* White text for dark theme */
+    color: #fff; 
 }
 
-/* Add a border to the table */
+.tasks {
+    text-align: center;
+    margin-bottom: 15vh;
+}
+
 table, th, td {
     border-top: 1px solid #444; 
     border-bottom: 1px solid #444;
 }
 
-/* Add padding to table cells */
 th, td {
     padding: 12px;
 }
 
-/* Style the table header */
 th {
-    background-color: #333; /* Darker background for header */
-    color: #fff; /* White text */
+    background-color: #333; 
+    color: #fff; 
     font-weight: bold;
 }
 
-.tasks tr:first-child {
+table tr:first-child {
     text-align: center;
 }
 
@@ -35,3 +45,4 @@ img{
     height: 20px;
     cursor: pointer;
 }
+

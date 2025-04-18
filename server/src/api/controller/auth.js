@@ -81,11 +81,7 @@ const registerUser = async (req, res) => {
 
         }
     } catch (err) {
-        console.error(err); // Log the error for debugging
-        res.status(err.error_code || 500).json({
-            error: true,
-            message: err.response_data || 'Internal Server Error',
-        });
+        res.status(err.error_code).json(err.response_data);
     }
 }
 

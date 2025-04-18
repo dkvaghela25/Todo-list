@@ -124,12 +124,7 @@ const updateUser = async (req, res) => {
         res.status(200).json({ message: 'User updated successfully' });
 
     } catch (err) {
-        console.error(err); // Log the error for debugging
-        const statusCode = err.error_code || 500; // Default to 500 if error_code is undefined
-        res.status(statusCode).json({
-            error: true,
-            message: err.response_data || 'Internal Server Error',
-        });
+        res.status(err.error_code).json(err.response_data);
     }
 
 }
