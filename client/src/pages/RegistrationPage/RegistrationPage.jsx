@@ -3,6 +3,7 @@ import axios from 'axios';
 import './RegistrationPage.css';
 import { Link, useNavigate } from 'react-router-dom';
 import defaultProfilePicture from '../profile-picture.png';
+import ToastHelper from '../../helper/toastHelper'; // Use the helper
 
 function RegistrationPage() {
   const [formData, setFormData] = useState({
@@ -32,8 +33,8 @@ function RegistrationPage() {
   };
 
   const resetPicture = (e) => {
-    setFile(defaultProfilePicture)
-    setBackgroundImage(defaultProfilePicture)
+    setFile(defaultProfilePicture);
+    setBackgroundImage(defaultProfilePicture);
   };
 
   const registerUser = async (e) => {
@@ -55,11 +56,10 @@ function RegistrationPage() {
           'Content-Type': 'multipart/form-data',
         },
       });
-      alert(res.data.message);
       navigate('/login');
+      ToastHelper.success(res.data.message || 'Registration successful'); // Use the helper
     } catch (error) {
-      console.error('Error response:', error.response.data);
-      alert(`Error: ${error.response.data.message || 'Registration failed'}`);
+      ToastHelper.error(error.response.data.message || 'Registration failed'); // Use the helper
     }
   };
 
@@ -84,7 +84,7 @@ function RegistrationPage() {
             type="text"
             name="username"
             placeholder="Username"
-            autocomplete="off"
+            autoComplete="off"
             value={formData.username}
             onChange={handleChange}
           />
@@ -93,7 +93,7 @@ function RegistrationPage() {
             type="password"
             name="password"
             placeholder="Password"
-            autocomplete="off"
+            autoComplete="off"
             value={formData.password}
             onChange={handleChange}
           />
@@ -102,7 +102,7 @@ function RegistrationPage() {
             type="email"
             name="email"
             placeholder="Email"
-            autocomplete="off"
+            autoComplete="off"
             value={formData.email}
             onChange={handleChange}
           />
@@ -111,7 +111,7 @@ function RegistrationPage() {
             type="text"
             name="phone_no"
             placeholder="Phone No."
-            autocomplete="off"
+            autoComplete="off"
             value={formData.phone_no}
             onChange={handleChange}
           />

@@ -4,6 +4,8 @@ import '../style.css';
 import './TodoList.css';
 import editIcon from './edit.svg';
 import deleteIcon from './delete.svg';
+import ToastHelper from '../../helper/toastHelper'; // Use the helper
+
 
 function TodoList() {
 
@@ -53,20 +55,16 @@ function TodoList() {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
-            });
-            alert(res.data.message);
+            });            
 
+            ToastHelper.success(res.data.message);
+            
             setFormData({
                 title: '',
                 description: ''
             });
         } catch (error) {
-            if (error.response) {
-                console.error('Error response:', error.response.data);
-                alert(`Error: ${error.response.data.message || 'Registration failed'}`);
-            } else {
-                console.error('Error:', error.message);
-            }
+            ToastHelper.error(error.response.data.message || 'Failed to add task');
         }
     };
 

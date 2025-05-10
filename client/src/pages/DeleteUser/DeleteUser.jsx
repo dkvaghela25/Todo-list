@@ -2,6 +2,8 @@ import React from 'react'
 import { jwtDecode } from "jwt-decode";
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import ToastHelper from '../../helper/toastHelper'; // Use the helper
+
 
 import '../style.css'
 import './DeleteUser.css'
@@ -26,16 +28,13 @@ function DeleteUser() {
                 },
             });
 
-            alert(res.data.message);
-            document.querySelector('.profile-button').hidden = true
-            
+            ToastHelper.success(res.data.message);
             navigate('/login')
         } catch (error) {
             if (error.response) {
-                console.error('Error response:', error.response.data);
-                alert(`Error: ${error.response.data.message}`);
+                ToastHelper.error(error.response.data.message);
             } else {
-                console.error('Error:', error.message);
+                ToastHelper.error(error.message);
             }
         }
     };

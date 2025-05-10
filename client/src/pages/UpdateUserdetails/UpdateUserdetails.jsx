@@ -4,6 +4,7 @@ import { jwtDecode } from "jwt-decode";
 import './UpdateUserdetails.css';
 import { useNavigate } from 'react-router-dom';
 import defaultProfilePicture from '../profile-picture.png';
+import ToastHelper from '../../helper/toastHelper'; // Use the helper
 
 function UpdateUserdetails() {
   const [formData, setFormData] = useState({});
@@ -80,15 +81,10 @@ function UpdateUserdetails() {
         },
       });
 
-      alert(res.data.message);
+      ToastHelper.success(res.data.message);
       navigate('/user-details');
     } catch (error) {
-      if (error.response) {
-        console.error('Error response:', error.response.data);
-        alert(`Error: ${error.response.data.message || 'Update failed'}`);
-      } else {
-        console.error('Error:', error.message);
-      }
+      ToastHelper.error(error.response.data.message || 'Update failed');
     }
   };
 

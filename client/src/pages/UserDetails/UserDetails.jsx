@@ -3,7 +3,7 @@ import axios from 'axios';
 import { jwtDecode } from "jwt-decode";
 import './UserDetails.css';
 import { useNavigate } from 'react-router-dom';
-
+import ToastHelper from '../../helper/toastHelper'; 
 
 function UserDetails() {
 
@@ -26,7 +26,7 @@ function UserDetails() {
 
                 setData(res.data);
             } catch (err) {
-                console.error('Error fetching user details:', err);
+                ToastHelper.error('Failed to fetch user details');
             }
         };
 

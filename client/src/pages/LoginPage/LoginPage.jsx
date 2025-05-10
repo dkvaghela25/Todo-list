@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import '../style.css';
 import { Link, useNavigate } from 'react-router-dom';
+import ToastHelper from '../../helper/toastHelper'; // Use the helper
 
 function LoginPage() {
   const [formData, setFormData] = useState({
@@ -22,14 +23,12 @@ function LoginPage() {
     try {
       const res = await axios.post('http://localhost:3000/auth/login', formData);
       sessionStorage.setItem("token", res.data.Token);
-      alert(res.data.message);
-
-      document.querySelector('.profile-button').hidden = false
-
+      
+      ToastHelper.success(res.data.message);
+      
       navigate('/user-details');
     } catch (error) {
-      console.error('Error response:', error.response.data);
-      alert(`Error: ${error.response.data.message || 'Registration failed'}`);
+      ToastHelper.error(error.response.data.message);
     }
   };
 
