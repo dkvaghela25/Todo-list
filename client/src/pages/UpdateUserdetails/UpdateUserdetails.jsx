@@ -8,6 +8,7 @@ import ToastHelper from '../../helper/toastHelper'; // Use the helper
 
 function UpdateUserdetails() {
   const [formData, setFormData] = useState({});
+  const [originalData, setOriginalData] = useState({});
   const [file, setFile] = useState(null);
   const [backgroundImage, setBackgroundImage] = useState(null);
 
@@ -26,6 +27,7 @@ function UpdateUserdetails() {
           },
         });
 
+        setOriginalData(res.data);
         setFormData(res.data);
         setBackgroundImage(res.data.image_url);
         setFile(null);
@@ -58,22 +60,31 @@ function UpdateUserdetails() {
 
   const updateUser = async (e) => {
     e.preventDefault();
+
+    const updatedData = {};
+
+    for (const key in formData) {
+      if (formData[key] !== originalData[key]) {
+        updatedData[key] = formData[key];
+      }
+    }
+
     const formDataWithFile = new FormData();
-    formDataWithFile.append('username', formData.username);
-    formDataWithFile.append('email', formData.email);
-    formDataWithFile.append('phone_no', formData.phone_no);
+    for (const key in updatedData) {
+      formDataWithFile.append(key, updatedData[key]);
+    }
 
     if (file instanceof File) {
       formDataWithFile.append('image', file);
     }
 
+    console.log('Updated data:', updatedData);
     console.log('Form data being sent:');
     for (let pair of formDataWithFile.entries()) {
       console.log(pair[0] + ':', pair[1]);
     }
 
     try {
-
       const res = await axios.patch(`http://localhost:3000/user/update/${user_id}`, formDataWithFile, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -84,7 +95,7 @@ function UpdateUserdetails() {
       ToastHelper.success(res.data.message);
       navigate('/user-details');
     } catch (error) {
-      ToastHelper.error(error.response.data.message || 'Update failed');
+      ToastHelper.error(error.response?.data?.message || 'Update failed');
     }
   };
 

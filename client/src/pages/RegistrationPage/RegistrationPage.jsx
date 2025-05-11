@@ -9,6 +9,7 @@ function RegistrationPage() {
   const [formData, setFormData] = useState({
     username: '',
     password: '',
+    confirmPassword: '',
     email: '',
     phone_no: '',
   });
@@ -41,7 +42,13 @@ function RegistrationPage() {
     e.preventDefault();
     const formDataWithFile = new FormData();
     formDataWithFile.append('username', formData.username);
-    formDataWithFile.append('password', formData.password);
+
+    if (formData.password === formData.confirmPassword) {
+      formDataWithFile.append('password', formData.password);
+    } else {
+      return ToastHelper.error('Passwords do not match');
+    }
+
     formDataWithFile.append('email', formData.email);
     formDataWithFile.append('phone_no', formData.phone_no);
     if (file) {
@@ -76,7 +83,7 @@ function RegistrationPage() {
               backgroundImage: backgroundImage ? `url(${backgroundImage})` : `url(${defaultProfilePicture})`,
             }}
           />
-          <button>Reset Picture</button>
+          <button onClick={resetPicture}>Reset Picture</button>
         </div>
         <div className="right">
           <label htmlFor="username">Username:</label>
@@ -95,6 +102,14 @@ function RegistrationPage() {
             placeholder="Password"
             autoComplete="off"
             value={formData.password}
+            onChange={handleChange}
+          />
+          <label htmlFor="username">Confirm Password:</label>
+          <input
+            type="password"
+            name="confirmPassword"
+            placeholder="Confirm Password"
+            autoComplete="off"
             onChange={handleChange}
           />
           <label htmlFor="username">Email ID:</label>

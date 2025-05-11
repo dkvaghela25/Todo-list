@@ -5,7 +5,7 @@ const { client } = require('../../database/index')
 const { getUsernames } = require('../../helper/methods')
 const { tokenBlacklist } = require('../../helper/constants');
 const { RequestInputError, AuthenticationError } = require('../../helper/errors');
-const { validate_email, validate_phone_no } = require('../../helper/validate');
+const { validate_email, validate_phone_no, validate_password } = require('../../helper/validate');
 
 const registerUser = async (req, res) => {
 
@@ -31,6 +31,7 @@ const registerUser = async (req, res) => {
 
         validate_email(req.body.email)
         validate_phone_no(req.body.phone_no)
+        validate_password(req.body.password)
 
         var image_url;
 
@@ -125,7 +126,7 @@ const loginUser = async (req, res) => {
                 return res.status(200).json({ error: false, message: 'User loggedin successfully', Token: jwtToken });
 
             } else {
-                throw new AuthenticationError('Wrong Password')
+                throw new AuthenticationError('Invalid Credentials')
             }
 
         }
