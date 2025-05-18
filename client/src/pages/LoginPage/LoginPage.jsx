@@ -6,7 +6,7 @@ import ToastHelper from '../../helper/toastHelper'; // Use the helper
 
 function LoginPage() {
   const [formData, setFormData] = useState({
-    username: '',
+    credentials: '',
     password: ''
   });
 
@@ -38,9 +38,9 @@ function LoginPage() {
       <form onSubmit={handleSubmit}>
         <input
           type="text"
-          name="username"
-          placeholder="Username or Email"
-          value={formData.username}
+          name="credentials"
+          placeholder="Username or Email ID"
+          value={formData.credentials}
           onChange={handleChange}
         />
         <input

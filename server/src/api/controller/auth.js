@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const cloudinary = require('cloudinary').v2;
+const validator = require("email-validator");
 const { client } = require('../../database/index')
 const { getUsernames, getEmails } = require('../../helper/methods')
 const { tokenBlacklist } = require('../../helper/constants');
@@ -96,7 +97,7 @@ const loginUser = async (req, res) => {
 
     try {
 
-        if (!req.body.username) {
+        if (!req.body.credentials) {
             throw new RequestInputError('Username or Email ID is required')
         }
 
@@ -105,38 +106,59 @@ const loginUser = async (req, res) => {
 
         }
 
-        let users = await getUsernames();
+        let credentials = req.body.credentials;
 
-        if (!users.includes(req.body.username)) {
-            return res.status(400).json({ error: true, message: 'Username is not available please register' });
-        }
-        else {
-            
-            let username = req.body.username;
-            let input_password = req.body.password;
 
-            let user = await client.query({
-                text: `SELECT user_id,username,password FROM public.users where username = $1;`,
-            }, [username]);
+        let input_password = req.body.password;
 
-            var stored_password = user.rows[0].password
-            let user_id = user.rows[0].user_id
+        let isEmail = validator.validate(credentials);
 
-            let match_password = await bcrypt.compare(input_password, stored_password)
+        let user;
 
-            if (match_password) {
+        if (isEmail) {
 
-                let json = { "user_id": user_id }
-                let jwtToken = jwt.sign(json, process.env.JWT_SECRET, { expiresIn: 3600 });
-                return res.status(200).json({ error: false, message: 'User loggedin successfully', Token: jwtToken });
+            emails = await getEmails();
 
-            } else {
-                throw new AuthenticationError('Invalid Credentials')
+            if (emails.includes(credentials) == false) {
+                return res.status(409).json({ error: true, message: 'Invalid credentials' });
             }
 
+            user = await client.query({
+                text: `SELECT user_id,username,password FROM public.users where email = $1;`,
+            }, [credentials]);
+
+        } else {
+
+            let users = await getUsernames();
+            
+            if (users.includes(credentials) == false) {
+                return res.status(409).json({ error: true, message: 'Invalid credentials' });
+            }
+
+            user = await client.query({
+                text: `SELECT user_id,username,password FROM public.users where username = $1;`,
+            }, [credentials]);
+
         }
 
-    } catch (err) {
+        var stored_password = user.rows[0].password
+        let user_id = user.rows[0].user_id
+
+        let match_password = await bcrypt.compare(input_password, stored_password)
+
+        if (match_password) {
+
+            let json = { "user_id": user_id }
+            let jwtToken = jwt.sign(json, process.env.JWT_SECRET, { expiresIn: 3600 });
+            return res.status(200).json({ error: false, message: 'User loggedin successfully', Token: jwtToken });
+
+        } else {
+            throw new AuthenticationError('Invalid Credentials')
+        }
+
+    }
+
+    catch (err) {
         res.status(err.error_code).json(err.response_data);
     }
 
@@ -144,10 +166,7 @@ const loginUser = async (req, res) => {
 
 const logoutUser = async (req, res) => {
 
-    console.log(req.headers)
-
     let token = req.headers.authorization;
-    console.log(token);
 
     token = token.split(' ')[1];
     console.log(token);
