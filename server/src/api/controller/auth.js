@@ -2,7 +2,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const cloudinary = require('cloudinary').v2;
 const { client } = require('../../database/index')
-const { getUsernames } = require('../../helper/methods')
+const { getUsernames, getEmails } = require('../../helper/methods')
 const { tokenBlacklist } = require('../../helper/constants');
 const { RequestInputError, AuthenticationError } = require('../../helper/errors');
 const { validate_email, validate_phone_no, validate_password } = require('../../helper/validate');
@@ -56,8 +56,12 @@ const registerUser = async (req, res) => {
         }
 
         let users = await getUsernames();
+        let emails = await getEmails();
+
         if (users.includes(req.body.username)) {
             return res.status(409).json({ error: true, message: 'Username is already taken' });
+        } else if (emails.includes(req.body.email)) {
+            return res.status(409).json({ error: true, message: 'Email ID is already in use' });
         }
         else {
 
@@ -93,7 +97,7 @@ const loginUser = async (req, res) => {
     try {
 
         if (!req.body.username) {
-            throw new RequestInputError('Username is required')
+            throw new RequestInputError('Username or Email ID is required')
         }
 
         if (!req.body.password) {
@@ -107,6 +111,7 @@ const loginUser = async (req, res) => {
             return res.status(400).json({ error: true, message: 'Username is not available please register' });
         }
         else {
+            
             let username = req.body.username;
             let input_password = req.body.password;
 

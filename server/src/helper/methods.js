@@ -11,4 +11,15 @@ async function getUsernames() {
     return users;
 }
 
-module.exports = { getUsernames };
+async function getEmails() {
+    let emails = await client.query({
+        text: 'SELECT email FROM public.users;',
+        rowMode: 'array',
+    });
+
+    emails = emails.rows.join(' ').split(' ');
+
+    return emails;
+}
+
+module.exports = { getUsernames , getEmails };

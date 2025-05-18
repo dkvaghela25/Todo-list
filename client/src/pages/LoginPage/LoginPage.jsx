@@ -39,7 +39,7 @@ function LoginPage() {
         <input
           type="text"
           name="username"
-          placeholder="Username"
+          placeholder="Username or Email"
           value={formData.username}
           onChange={handleChange}
         />

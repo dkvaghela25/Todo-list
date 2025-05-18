@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs');
 const cloudinary = require('cloudinary').v2;
 const { client } = require('../../database/index')
-const { getUsernames } = require('../../helper/methods')
+const { getUsernames, getEmails } = require('../../helper/methods')
 const { AuthenticationError } = require('../../helper/errors');
 const { validate_email, validate_phone_no } = require('../../helper/validate');
 
@@ -44,6 +44,7 @@ const updateUser = async (req, res) => {
         let change_in = req.body;
 
         let users = await getUsernames();
+        let emails = await getEmails();
 
         username = change_in.username
         email = change_in.email
@@ -62,6 +63,12 @@ const updateUser = async (req, res) => {
 
         if (email) {
             validate_email(email)
+
+            var valid_email = emails.includes(email)
+            
+            if (valid_email == true) {
+                return res.status(409).json({ error: true, message: 'Email ID is already in use' });
+            }
         }
 
         if (phone_no) {
