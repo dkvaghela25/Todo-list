@@ -77,9 +77,10 @@ const updateUser = async (req, res) => {
 
         var image_url;
 
+        console.log(req.file)
+
         if (!req.file) {
             console.log('nulllllllllll')
-            image_url = 'https://res.cloudinary.com/dycqdhycj/image/upload/v1744885687/default-profile-picture_lrivmz.png';
         } else {
 
             console.log('not null')
@@ -94,7 +95,7 @@ const updateUser = async (req, res) => {
 
             if (image_url !== 'https://res.cloudinary.com/dycqdhycj/image/upload/v1744885687/default-profile-picture_lrivmz.png') {
 
-                console.log('hello')
+                console.log('hello') 
 
                 let public_id = image_url.split('/');
                 public_id = public_id[public_id.length - 1];
@@ -118,17 +119,16 @@ const updateUser = async (req, res) => {
                 });
                 image_url = result.secure_url;
 
+                let query = `UPDATE public.users SET image_url = $1 WHERE user_id = $2;`
+                await client.query(query, [image_url, user_id])
 
             } catch (error) {
                 console.error('Error uploading to Cloudinary:', error);
                 throw new Error('Failed to upload image to Cloudinary');
             }
-
-
+    
         }
 
-        let query = `UPDATE public.users SET image_url = $1 WHERE user_id = $2;`
-        await client.query(query, [image_url, user_id])
 
         change_in.forEach(element => {
             let query = `UPDATE public.users SET ${element} = $1 WHERE user_id = $2;`

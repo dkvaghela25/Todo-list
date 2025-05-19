@@ -15,12 +15,6 @@ function UpdateUserdetails() {
 
   const navigate = useNavigate();
 
-
-  // useEffect(() => {
-
-
-  // }, []);
-
   useEffect(() => {
 
     let bool = isLoggedin();
@@ -70,8 +64,13 @@ function UpdateUserdetails() {
     }
   };
 
-  const resetPicture = () => {
-    setFile(null);
+  const resetPicture = async () => {
+    // Fetch the default image as a blob
+    const response = await fetch(defaultProfilePicture);
+    const blob = await response.blob();
+    // Create a File object from the blob (name and type are important)
+    const file = new File([blob], "default-profile-picture.png", { type: blob.type });
+    setFile(file);
     setBackgroundImage(defaultProfilePicture);
   };
 
@@ -123,7 +122,7 @@ function UpdateUserdetails() {
 
   // Added new comment
 
-  
+
   return (
     <div className="container">
       <div className="heading">Update User Details</div>
