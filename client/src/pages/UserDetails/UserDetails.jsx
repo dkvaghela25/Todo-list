@@ -3,18 +3,29 @@ import axios from 'axios';
 import { jwtDecode } from "jwt-decode";
 import './UserDetails.css';
 import { useNavigate } from 'react-router-dom';
-import ToastHelper from '../../helper/toastHelper'; 
+import ToastHelper from '../../helper/toastHelper';
+import isLoggedin from '../../helper/isLoggedin';
 
 function UserDetails() {
 
     const [data, setData] = useState({});
     const navigate = useNavigate();
 
-    let token = localStorage.getItem('token');
-    const decodedToken = jwtDecode(token);
-    let user_id = decodedToken.user_id;
-
     useEffect(() => {
+        
+        let bool = isLoggedin();
+    
+        console.log(bool)
+        
+        if (!bool) {
+            navigate('/login');
+            return;
+        }
+
+        let token = localStorage.getItem('token');
+        const decodedToken = jwtDecode(token);
+        let user_id = decodedToken.user_id;
+        
         const fetchUserDetails = async () => {
             try {
 

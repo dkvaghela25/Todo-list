@@ -1,21 +1,35 @@
-import React from 'react'
+import React , {useEffect} from 'react'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom'
 import { jwtDecode } from "jwt-decode";
 import '../style.css'
 import ToastHelper from '../../helper/toastHelper'; // Use the helper
+import isLoggedin from '../../helper/isLoggedin';
 
 
 function LogoutPage() {
 
     const navigate = useNavigate();
 
-    let token = localStorage.getItem('token');
-    const decodedToken = jwtDecode(token);
-    let user_id = decodedToken.user_id;
+    useEffect(() => {
 
+        let bool = isLoggedin();
+
+        console.log(bool)
+
+        if (!bool) {
+            navigate('/login');
+            return;
+        }
+
+    }, []);
+    
     const logout = async (e) => {
         e.preventDefault();
+
+        let token = localStorage.getItem('token');
+        const decodedToken = jwtDecode(token);
+        let user_id = decodedToken.user_id;
         try {
 
             console.log(token)

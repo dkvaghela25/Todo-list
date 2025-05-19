@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'
 import axios from 'axios';
 import '../style.css';
 import './TodoList.css';
 import editIcon from './edit.svg';
 import deleteIcon from './delete.svg';
 import ToastHelper from '../../helper/toastHelper'; // Use the helper
+import isLoggedin from '../../helper/isLoggedin';
 
 
 function TodoList() {
@@ -17,8 +19,23 @@ function TodoList() {
     const [tasks, setTasks] = useState([]);
     const [todoId, setTodoId] = useState(null);
 
-    let token = localStorage.getItem('token');
+    const navigate = useNavigate();
 
+    useEffect(() => {
+
+        let bool = isLoggedin();
+
+        console.log(bool)
+
+        if (!bool) {
+            navigate('/login');
+            return;
+        }
+
+    }, []);
+
+    
+    let token = localStorage.getItem('token');
     useEffect(() => {
         const fetchTasks = async () => {
             try {

@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState , useEffect } from 'react';
 import axios from 'axios';
 import '../style.css';
 import { Link, useNavigate } from 'react-router-dom';
 import ToastHelper from '../../helper/toastHelper'; // Use the helper
+import isLoggedin from '../../helper/isLoggedin';
 
 function LoginPage() {
   const [formData, setFormData] = useState({
@@ -11,6 +12,16 @@ function LoginPage() {
   });
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+
+    let bool = isLoggedin();
+
+    if(bool) {
+      navigate('/user-details')
+    }
+
+  } , [])
 
   const handleChange = (e) => {
     const { name, value } = e.target;

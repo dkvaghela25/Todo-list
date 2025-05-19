@@ -5,6 +5,7 @@ import './UpdateUserdetails.css';
 import { useNavigate } from 'react-router-dom';
 import defaultProfilePicture from '../profile-picture.png';
 import ToastHelper from '../../helper/toastHelper'; // Use the helper
+import isLoggedin from '../../helper/isLoggedin';
 
 function UpdateUserdetails() {
   const [formData, setFormData] = useState({});
@@ -14,11 +15,27 @@ function UpdateUserdetails() {
 
   const navigate = useNavigate();
 
-  let token = localStorage.getItem('token');
-  const decodedToken = jwtDecode(token);
-  let user_id = decodedToken.user_id;
+
+  // useEffect(() => {
+
+
+  // }, []);
 
   useEffect(() => {
+
+    let bool = isLoggedin();
+
+    console.log(bool)
+
+    if (!bool) {
+      navigate('/login');
+      return;
+    }
+
+    let token = localStorage.getItem('token');
+    const decodedToken = jwtDecode(token);
+    let user_id = decodedToken.user_id;
+
     const fetchUserDetails = async () => {
       try {
         const res = await axios.get(`http://localhost:3000/user/${user_id}`, {
@@ -60,6 +77,10 @@ function UpdateUserdetails() {
 
   const updateUser = async (e) => {
     e.preventDefault();
+
+    let token = localStorage.getItem('token');
+    const decodedToken = jwtDecode(token);
+    let user_id = decodedToken.user_id;
 
     const updatedData = {};
 

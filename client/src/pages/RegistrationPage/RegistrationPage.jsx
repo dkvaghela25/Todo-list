@@ -1,10 +1,10 @@
 import React, { useState , useEffect } from 'react';
 import axios from 'axios';
-import { jwtDecode } from "jwt-decode";
 import './RegistrationPage.css';
 import { Link, useNavigate } from 'react-router-dom';
 import defaultProfilePicture from '../profile-picture.png';
 import ToastHelper from '../../helper/toastHelper';
+import isLoggedin from '../../helper/isLoggedin';
 
 function RegistrationPage() {
 
@@ -23,30 +23,13 @@ function RegistrationPage() {
 
   useEffect(() => {
 
-    const token = localStorage.getItem('token');
+    let bool = isLoggedin();
 
-    if(token){
-
-      console.log('Token found:', token);
-
-      const decodedToken = jwtDecode(token);
-
-      const expirationTime = decodedToken.exp;
-      const currentTime = Math.floor(Date.now() / 1000);
-    
-      if (currentTime > expirationTime) {
-        console.log('Token expired'); 
-        localStorage.removeItem('token');
-      } else {
-        console.log('Token is valid');
-        navigate('/user-details');
-      }
-
-    } else {
-      console.log('No token found');
+    if(bool) {
+      navigate('/user-details')
     }
 
-  })
+  } , [])
 
   const handleChange = (e) => {
     const { name, value } = e.target;

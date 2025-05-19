@@ -1,9 +1,9 @@
-import React from 'react'
+import React , { useEffect } from 'react'
 import { jwtDecode } from "jwt-decode";
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import ToastHelper from '../../helper/toastHelper'; // Use the helper
-
+import isLoggedin from '../../helper/isLoggedin';
 
 import '../style.css'
 import './DeleteUser.css'
@@ -12,12 +12,27 @@ function DeleteUser() {
 
     const navigate = useNavigate();
 
-    let token = localStorage.getItem('token');
-    const decodedToken = jwtDecode(token);
-    let user_id = decodedToken.user_id;
+    useEffect(() => {
+
+        let bool = isLoggedin();
+
+        console.log(bool)
+
+        if (!bool) {
+            navigate('/login');
+            return;
+        }
+
+    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+
+        let token = localStorage.getItem('token');
+        const decodedToken = jwtDecode(token);
+        let user_id = decodedToken.user_id;
+
 
         try {
             console.log(token)
