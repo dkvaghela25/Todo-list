@@ -90,6 +90,8 @@ function UpdateUserdetails() {
       }
     }
 
+
+    
     const formDataWithFile = new FormData();
     for (const key in updatedData) {
       formDataWithFile.append(key, updatedData[key]);
