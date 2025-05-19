@@ -26,6 +26,8 @@ function LogoutPage() {
                 }
             });
 
+            localStorage.removeItem("token");
+
             ToastHelper.success(res.data.message);
             navigate('/login')
             
