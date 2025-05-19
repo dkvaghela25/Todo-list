@@ -65,7 +65,7 @@ const updateUser = async (req, res) => {
             validate_email(email)
 
             var valid_email = emails.includes(email)
-            
+
             if (valid_email == true) {
                 return res.status(409).json({ error: true, message: 'Email ID is already in use' });
             }
@@ -82,10 +82,15 @@ const updateUser = async (req, res) => {
             image_url = 'https://res.cloudinary.com/dycqdhycj/image/upload/v1744885687/default-profile-picture_lrivmz.png';
         } else {
 
+            console.log('not null')
+
             let user_id = req.params.user_id;
+            console.log('user_id', user_id)
 
             image_url = await client.query('SELECT image_url FROM public.users where user_id = $1;', [user_id]);
             image_url = image_url.rows[0].image_url
+
+            console.log('image_url', image_url)
 
             if (image_url !== 'https://res.cloudinary.com/dycqdhycj/image/upload/v1744885687/default-profile-picture_lrivmz.png') {
 
@@ -98,30 +103,30 @@ const updateUser = async (req, res) => {
 
 
                 await cloudinary.uploader.destroy(public_id);
-
-                try {
-
-                    const result = await new Promise((resolve, reject) => {
-                        cloudinary.uploader.upload_stream({ resource_type: 'auto' }, (error, result) => {
-                            if (error) {
-                                reject(error);
-                            } else {
-                                resolve(result);
-                            }
-                        }).end(req.file.buffer);
-                    });
-                    image_url = result.secure_url;
-
-                    
-                } catch (error) {
-                    console.error('Error uploading to Cloudinary:', error);
-                    throw new Error('Failed to upload image to Cloudinary');
-                }
-                
             }
-            
+
+            try {
+
+                const result = await new Promise((resolve, reject) => {
+                    cloudinary.uploader.upload_stream({ resource_type: 'auto' }, (error, result) => {
+                        if (error) {
+                            reject(error);
+                        } else {
+                            resolve(result);
+                        }
+                    }).end(req.file.buffer);
+                });
+                image_url = result.secure_url;
+
+
+            } catch (error) {
+                console.error('Error uploading to Cloudinary:', error);
+                throw new Error('Failed to upload image to Cloudinary');
+            }
+
+
         }
-        
+
         let query = `UPDATE public.users SET image_url = $1 WHERE user_id = $2;`
         await client.query(query, [image_url, user_id])
 

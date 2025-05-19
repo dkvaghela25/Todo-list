@@ -14,7 +14,7 @@ function UpdateUserdetails() {
 
   const navigate = useNavigate();
 
-  let token = sessionStorage.getItem('token');
+  let token = localStorage.getItem('token');
   const decodedToken = jwtDecode(token);
   let user_id = decodedToken.user_id;
 

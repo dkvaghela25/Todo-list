@@ -17,7 +17,7 @@ function TodoList() {
     const [tasks, setTasks] = useState([]);
     const [todoId, setTodoId] = useState(null);
 
-    let token = sessionStorage.getItem('token');
+    let token = localStorage.getItem('token');
 
     useEffect(() => {
         const fetchTasks = async () => {

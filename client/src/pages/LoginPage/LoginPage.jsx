@@ -22,7 +22,7 @@ function LoginPage() {
     console.log('Form data being sent:', formData);
     try {
       const res = await axios.post('http://localhost:3000/auth/login', formData);
-      sessionStorage.setItem("token", res.data.Token);
+      localStorage.setItem("token", res.data.Token);
       
       ToastHelper.success(res.data.message);
       
