@@ -120,6 +120,8 @@ function UpdateUserdetails() {
     }
   };
 
+  
+
   return (
     <div className="container">
       <div className="heading">Update User Details</div>
