@@ -49,7 +49,7 @@ The project is divided into two main parts:
 
 1. Clone the repository:
 ```bash
-git clone <repository-url>
+git clone https://github.com/dkvaghela25/Todo-list.git
 cd Todo-list
 ```
 
