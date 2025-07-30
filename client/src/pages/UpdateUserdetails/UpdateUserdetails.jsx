@@ -119,56 +119,99 @@ function UpdateUserdetails() {
     }
   };
 
-
-  // Added new comment
-
-
   return (
-    <div className="container">
-      <div className="heading">Update User Details</div>
-      <form className="registration_form" onSubmit={updateUser}>
-        <div className="left">
-          <input
-            type="file"
-            className="imageInput"
-            onChange={handleFileChange}
-            style={{
-              backgroundImage: backgroundImage ? `url(${backgroundImage})` : `url(${defaultProfilePicture})`,
-            }}
-          />
-          <button type="button" onClick={resetPicture}>Reset Picture</button>
+    <div className="update-user-container">
+      <div className="update-user-card">
+        <div className="update-user-header">
+          <h1 className="update-user-title">Update User Details</h1>
+          <p className="update-user-subtitle">Modify your account information and profile picture</p>
         </div>
-        <div className="right">
-          <label htmlFor="username">Username:</label>
-          <input
-            type="text"
-            name="username"
-            placeholder="Username"
-            autoComplete="off"
-            value={formData.username}
-            onChange={handleChange}
-          />
-          <label htmlFor="email">Email ID:</label>
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            autoComplete="off"
-            value={formData.email}
-            onChange={handleChange}
-          />
-          <label htmlFor="phone_no">Phone No:</label>
-          <input
-            type="text"
-            name="phone_no"
-            placeholder="Phone No."
-            autoComplete="off"
-            value={formData.phone_no}
-            onChange={handleChange}
-          />
-          <button type="submit">Update</button>
-        </div>
-      </form>
+        
+        <form className="update-user-form" onSubmit={updateUser}>
+          <div className="update-user-content">
+            <div className="update-user-left">
+              <div
+                className="profile-picture-container"
+                style={{
+                  backgroundImage: backgroundImage ? `url(${backgroundImage})` : `url(${defaultProfilePicture})`,
+                }}
+              >
+                <input
+                  type="file"
+                  className="image-input"
+                  onChange={handleFileChange}
+                  accept="image/*"
+                />
+              </div>
+              <button 
+                type="button" 
+                className="update-user-btn update-user-btn-secondary"
+                onClick={resetPicture}
+              >
+                <span className="btn-icon">🗑️</span>
+                Remove Picture
+              </button>
+            </div>
+            
+            <div className="update-user-right">
+              <div className="update-user-field">
+                <label className="update-user-label">Username</label>
+                <input
+                  type="text"
+                  name="username"
+                  className="update-user-input"
+                  placeholder="Username"
+                  autoComplete="off"
+                  value={formData.username || ''}
+                  onChange={handleChange}
+                />
+              </div>
+              
+              <div className="update-user-field">
+                <label className="update-user-label">Email ID</label>
+                <input
+                  type="email"
+                  name="email"
+                  className="update-user-input"
+                  placeholder="Email"
+                  autoComplete="off"
+                  value={formData.email || ''}
+                  onChange={handleChange}
+                />
+              </div>
+              
+              <div className="update-user-field">
+                <label className="update-user-label">Phone Number</label>
+                <input
+                  type="text"
+                  name="phone_no"
+                  className="update-user-input"
+                  placeholder="Phone No."
+                  autoComplete="off"
+                  value={formData.phone_no || ''}
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
+          </div>
+          
+          <div className="update-user-actions">
+            <button 
+              type="submit" 
+              className="update-user-btn update-user-btn-primary"
+            >
+              Update Profile
+            </button>
+            <button 
+              type="button" 
+              className="update-user-btn update-user-btn-secondary"
+              onClick={() => navigate('/user-details')}
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

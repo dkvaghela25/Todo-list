@@ -1,10 +1,10 @@
-/* TodoList Page Styles - Improved Width and Alignment */
+/* Login Page Styles - Improved Width and Alignment */
 
-.todo-container {
+.login-container {
     min-height: 100vh;
     display: flex;
     justify-content: center;
-    align-items: flex-start;
+    align-items: center;
     background-color: #0F131C;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -13,57 +13,54 @@
     margin-top: 80px;
 }
 
-.todo-card {
+.login-card {
     background-color: #1A1F2B;
     border-radius: 15px;
     padding: 40px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-    width: 80vw;
-    max-width: none;
+    max-width: 500px;
+    width: 100%;
     border: 1px solid #2A2F3B;
 }
 
-.todo-header {
+.login-header {
     text-align: center;
     margin-bottom: 40px;
 }
 
-.todo-title {
+.login-title {
     font-size: 32px;
     font-weight: 600;
     color: #D5D5D6;
     margin-bottom: 10px;
 }
 
-.todo-subtitle {
+.login-subtitle {
     font-size: 16px;
     color: #A4A6AB;
     line-height: 1.5;
 }
 
-.todo-form {
+.login-form {
     width: 100%;
-    margin-bottom: 40px;
 }
 
-.todo-form-content {
+.login-content {
     display: flex;
     flex-direction: column;
     gap: 20px;
-    align-items: stretch;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
+    margin-bottom: 40px;
+    width: 100%;
 }
 
-.todo-field {
+.login-field {
     display: flex;
     flex-direction: column;
     gap: 8px;
-    flex: 1;
-    min-width: 200px;
+    width: 100%;
 }
 
-.todo-label {
+.login-label {
     font-size: 14px;
     font-weight: 500;
     color: #A4A6AB;
@@ -71,7 +68,7 @@
     letter-spacing: 0.5px;
 }
 
-.todo-input {
+.login-input {
     background-color: #2A2F3B;
     color: #D5D5D6;
     padding: 15px 20px;
@@ -87,22 +84,22 @@
     outline: none;
 }
 
-.todo-input:focus {
+.login-input:focus {
     border-color: #4B7CFE;
     background-color: #3A3F4B;
     box-shadow: 0 0 0 2px rgba(75, 124, 254, 0.2);
 }
 
-.todo-input:hover {
+.login-input:hover {
     border-color: #4B7CFE;
     background-color: #3A3F4B;
 }
 
-.todo-input::placeholder {
+.login-input::placeholder {
     color: #6B7280;
 }
 
-.todo-actions {
+.login-actions {
     display: flex;
     gap: 15px;
     justify-content: center;
@@ -111,7 +108,7 @@
     max-width: 100%;
 }
 
-.todo-btn {
+.login-btn {
     padding: 12px 25px;
     border-radius: 8px;
     font-size: 16px;
@@ -119,196 +116,95 @@
     border: none;
     cursor: pointer;
     transition: all 0.3s ease;
-    min-width: 150px;
+    min-width: 200px;
     height: 45px;
     box-sizing: border-box;
 }
 
-.todo-btn-primary {
+.login-btn-primary {
     background-color: #4B7CFE;
     color: #C1D0FD;
 }
 
-.todo-btn-primary:hover {
+.login-btn-primary:hover {
     background-color: #3A6BE8;
     transform: translateY(-1px);
     box-shadow: 0 4px 15px rgba(75, 124, 254, 0.3);
 }
 
-.todo-btn-secondary {
-    background-color: #6B7280;
-    color: #C1D0FD;
-}
-
-.todo-btn-secondary:hover {
-    background-color: #5A6268;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 15px rgba(107, 114, 128, 0.3);
-}
-
-.todo-btn:active {
+.login-btn:active {
     transform: translateY(0);
 }
 
-.todo-tasks {
-    width: 100%;
-}
-
-.todo-tasks-header {
+.link-container {
     text-align: center;
-    margin-bottom: 30px;
-}
-
-.todo-tasks-title {
-    font-size: 24px;
-    font-weight: 600;
-    color: #D5D5D6;
-    margin-bottom: 10px;
-}
-
-.todo-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 20px 0;
-    font-size: 16px;
-    text-align: left;
-    color: #D5D5D6;
-    background-color: #2A2F3B;
-    border-radius: 8px;
-    overflow: hidden;
-}
-
-.todo-table th {
-    background-color: #3A3F4B;
+    margin-top: 20px;
     color: #A4A6AB;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    padding: 15px 20px;
-    border-bottom: 1px solid #4A4F5B;
+    font-size: 14px;
 }
 
-.todo-table td {
-    padding: 15px 20px;
-    border-bottom: 1px solid #3A3F4B;
-    transition: background-color 0.3s ease;
-}
-
-.todo-table tr:hover {
-    background-color: #3A3F4B;
-}
-
-.todo-table tr:last-child td {
-    border-bottom: none;
-}
-
-.todo-actions-cell {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    align-items: center;
-}
-
-.todo-action-icon {
-    width: 20px;
-    height: 20px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    padding: 5px;
-    border-radius: 4px;
-    font-size: 18px;
-}
-
-.todo-action-icon:hover {
-    background-color: #4A4F5B;
-    transform: scale(1.1);
-}
-
-.todo-edit-icon {
+.link-container a {
     color: #4B7CFE;
+    text-decoration: none;
+    font-weight: 500;
+    margin-left: 5px;
+    transition: color 0.3s ease;
 }
 
-.todo-delete-icon {
-    color: #EF4444;
+.link-container a:hover {
+    color: #3A6BE8;
+    text-decoration: underline;
 }
 
 /* Responsive design */
 @media (max-width: 768px) {
-    .todo-container {
+    .login-container {
         margin-top: 60px;
         padding: 15px;
     }
     
-    .todo-card {
+    .login-card {
         max-width: 95%;
         padding: 30px 25px;
     }
     
-    .todo-form-content {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 15px;
-    }
-    
-    .todo-field {
-        min-width: auto;
-    }
-    
-    .todo-actions {
+    .login-actions {
         flex-direction: column;
         align-items: center;
         gap: 10px;
     }
     
-    .todo-btn {
+    .login-btn {
         width: 100%;
         max-width: 250px;
         min-width: auto;
     }
-    
-    .todo-table {
-        font-size: 14px;
-    }
-    
-    .todo-table th,
-    .todo-table td {
-        padding: 10px 15px;
-    }
 }
 
 @media (max-width: 480px) {
-    .todo-container {
+    .login-container {
         margin-top: 50px;
         padding: 10px;
     }
     
-    .todo-card {
+    .login-card {
         padding: 25px 20px;
         max-width: 100%;
     }
     
-    .todo-title {
+    .login-title {
         font-size: 28px;
     }
     
-    .todo-btn {
+    .login-btn {
         min-width: 140px;
         height: 40px;
         padding: 10px 20px;
     }
     
-    .todo-input {
+    .login-input {
         padding: 12px 15px;
         font-size: 14px;
-    }
-    
-    .todo-table {
-        font-size: 12px;
-    }
-    
-    .todo-table th,
-    .todo-table td {
-        padding: 8px 10px;
     }
 }
 
@@ -324,7 +220,6 @@
     }
 }
 
-.todo-card {
+.login-card {
     animation: slideIn 0.6s ease-out;
-}
-
+} 

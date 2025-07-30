@@ -1,0 +1,170 @@
+.home-container {
+    min-height: calc(100vh - 60px); /* Subtracting navbar height */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    padding: 3rem 4rem;
+    margin-top: 60px; /* Add margin for navbar */
+}
+
+.home-content {
+    text-align: center;
+    padding: 4rem 3rem;
+    background: linear-gradient(135deg, #1a1f3c 0%, #2a3158 100%);
+    border-radius: 20px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    width: 50vw;
+    max-width: 1400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 3rem;
+}
+
+.logo-section {
+    margin-bottom: 1rem;
+}
+
+.logo-icon {
+    font-size: 3.5rem;
+    color: #4a90e2;
+    margin-bottom: 1rem;
+    filter: drop-shadow(0 0 10px rgba(74, 144, 226, 0.3));
+}
+
+.home-title {
+    font-size: 2.2rem;
+    margin-bottom: 0.5rem;
+    color: #fff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    font-weight: 600;
+}
+
+.home-subtitle {
+    color: #a8b1cf;
+    font-size: 1.1rem;
+    margin-top: 0.5rem;
+}
+
+.features-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 3rem;
+    margin: 1rem auto;
+    width: 100%;
+}
+
+.feature {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 2.5rem;
+    border-radius: 15px;
+    transition: transform 0.3s ease;
+    backdrop-filter: blur(5px);
+}
+
+.feature:hover {
+    transform: translateY(-5px);
+}
+
+.feature-icon {
+    font-size: 2.5rem;
+    color: #4a90e2;
+    margin-bottom: 1rem;
+}
+
+.feature h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    color: #fff;
+}
+
+.feature p {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.4;
+}
+
+.home-buttons {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.home-button {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 1rem 3rem;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    color: white;
+    font-weight: 500;
+}
+
+.button-icon {
+    font-size: 1.2rem;
+}
+
+.register-btn {
+    background-color: #4a90e2;
+    box-shadow: 0 4px 15px rgba(74, 144, 226, 0.3);
+}
+
+.register-btn:hover {
+    background-color: #357abd;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(74, 144, 226, 0.4);
+}
+
+.login-btn {
+    background-color: #2c3968;
+    box-shadow: 0 4px 15px rgba(44, 57, 104, 0.3);
+}
+
+.login-btn:hover {
+    background-color: #1e284d;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(44, 57, 104, 0.4);
+}
+
+@media (max-width: 768px) {
+    .home-content {
+        padding: 3rem 1.5rem;
+    }
+
+    .features-section {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        width: 100%;
+        padding: 0 1rem;
+    }
+
+    .home-buttons {
+        flex-direction: column;
+        gap: 1rem;
+        width: 100%;
+        max-width: 400px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .home-button {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .home-title {
+        font-size: 2rem;
+        padding: 0 1rem;
+    }
+
+    .feature {
+        padding: 1.5rem;
+    }
+}

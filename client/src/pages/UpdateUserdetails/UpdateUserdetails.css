@@ -1,36 +1,319 @@
-.registration_form{
-    width: 60vw;
-    flex-direction: row;
+.update-user-container {
+    min-height: 100vh;
     display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #0F131C;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+    padding: 20px;
+    margin-top: 80px;
 }
 
-.registration_form .left,
-.registration_form .right {
-    width: 50%;
+.update-user-card {
+    background-color: #1A1F2B;
+    border-radius: 15px;
+    padding: 40px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    max-width: 900px;
+    width: 100%;
+    border: 1px solid #2A2F3B;
+}
+
+.update-user-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.update-user-title {
+    font-size: 32px;
+    font-weight: 600;
+    color: #D5D5D6;
+    margin-bottom: 10px;
+}
+
+.update-user-subtitle {
+    font-size: 16px;
+    color: #A4A6AB;
+    line-height: 1.5;
+}
+
+.update-user-form {
+    width: 100%;
+}
+
+.update-user-content {
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
+    margin-bottom: 40px;
+    max-width: 100%;
+}
+
+.update-user-left {
+    flex: 0 0 200px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     align-items: center;
-    gap: 10px;
+    gap: 20px;
 }
 
-.left input {
-    position: relative;
-    width: 70%;
-    height: 0;
-    padding-bottom: 70%;
+.profile-picture-container {
+    width: 200px;
+    height: 200px;
     border-radius: 50%;
-    cursor: pointer;
-    border: 1px solid #ccc;
+    background-color: #2A2F3B;
     background-size: cover;
     background-position: center;
-    color: transparent;
+    border: 3px solid #4B7CFE;
+    box-shadow: 0 8px 25px rgba(75, 124, 254, 0.2);
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
 
-.left input.imageInput::file-selector-button {
-    display: none; 
+.profile-picture-container:hover {
+    border-color: #3A6BE8;
+    box-shadow: 0 8px 25px rgba(75, 124, 254, 0.4);
 }
 
-.registration_form input {
+.profile-picture-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, transparent 30%, rgba(75, 124, 254, 0.1) 50%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.profile-picture-container:hover::before {
+    opacity: 1;
+}
+
+.image-input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.image-input::file-selector-button {
+    display: none;
+}
+
+.update-user-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    min-width: 250px;
+    max-width: 400px;
+}
+
+.update-user-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+}
+
+.update-user-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #A4A6AB;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.update-user-input {
+    background-color: #2A2F3B;
+    color: #D5D5D6;
+    padding: 15px 20px;
+    border-radius: 8px;
+    border: 1px solid #3A3F4B;
+    font-size: 16px;
+    min-height: 20px;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease;
+    width: 100%;
     box-sizing: border-box;
+    outline: none;
+}
+
+.update-user-input:focus {
+    border-color: #4B7CFE;
+    background-color: #3A3F4B;
+    box-shadow: 0 0 0 2px rgba(75, 124, 254, 0.2);
+}
+
+.update-user-input:hover {
+    border-color: #4B7CFE;
+    background-color: #3A3F4B;
+}
+
+.update-user-input::placeholder {
+    color: #6B7280;
+}
+
+.update-user-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 30px;
+    max-width: 100%;
+}
+
+.update-user-btn {
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 200px;
+    height: 45px;
+    box-sizing: border-box;
+}
+
+.update-user-btn-primary {
+    background-color: #4B7CFE;
+    color: #C1D0FD;
+}
+
+.update-user-btn-primary:hover {
+    background-color: #3A6BE8;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(75, 124, 254, 0.3);
+}
+
+.update-user-btn-secondary {
+    background-color: #6B7280;
+    color: #C1D0FD;
+}
+
+.update-user-btn-secondary:hover {
+    background-color: #5A6268;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(107, 114, 128, 0.3);
+}
+
+.update-user-btn:active {
+    transform: translateY(0);
+}
+
+.btn-icon {
+    margin-right: 8px;
+    font-size: 14px;
+}
+
+/* Alternative button text options:
+   - "Clear Picture" 
+   - "Remove Photo"
+   - "Delete Picture"
+   - "Reset to Default"
+   - "Clear Avatar"
+*/
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .update-user-container {
+        margin-top: 60px;
+        padding: 15px;
+    }
+    
+    .update-user-card {
+        max-width: 95%;
+        padding: 30px 25px;
+    }
+    
+    .update-user-content {
+        flex-direction: column;
+        align-items: center;
+        gap: 25px;
+    }
+    
+    .update-user-left {
+        flex: none;
+    }
+    
+    .profile-picture-container {
+        width: 150px;
+        height: 150px;
+    }
+    
+    .update-user-right {
+        max-width: 100%;
+        min-width: auto;
+    }
+    
+    .update-user-actions {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .update-user-btn {
+        width: 100%;
+        max-width: 250px;
+        min-width: auto;
+    }
+}
+
+@media (max-width: 480px) {
+    .update-user-container {
+        margin-top: 50px;
+        padding: 10px;
+    }
+    
+    .update-user-card {
+        padding: 25px 20px;
+        max-width: 100%;
+    }
+    
+    .update-user-title {
+        font-size: 28px;
+    }
+    
+    .profile-picture-container {
+        width: 120px;
+        height: 120px;
+    }
+    
+    .update-user-btn {
+        min-width: 140px;
+        height: 40px;
+        padding: 10px 20px;
+    }
+    
+    .update-user-input {
+        padding: 12px 15px;
+        font-size: 14px;
+    }
+}
+
+/* Animation for card entrance */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.update-user-card {
+    animation: slideIn 0.6s ease-out;
 }

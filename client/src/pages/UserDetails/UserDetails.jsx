@@ -45,31 +45,63 @@ function UserDetails() {
     }, []);
 
     return (
-        <div className="container">
-            <div className="heading">User Details</div>
-            <div className="user_details">
-                <div className="left">
-                    <div
-                        className='profile_picture'
-                        style={{
-                            backgroundImage: `url(${data.image_url})`,
-                        }}>
+        <div className="user-details-container">
+            <div className="user-details-card">
+                <div className="user-details-header">
+                    <h1 className="user-details-title">User Details</h1>
+                    <p className="user-details-subtitle">Manage your account information and preferences</p>
+                </div>
+                
+                <div className="user-details-content">
+                    <div className="user-details-left">
+                        <div
+                            className='profile-picture'
+                            style={{
+                                backgroundImage: data.image_url ? `url(${data.image_url})` : 'none',
+                            }}>
+                        </div>
+                    </div>
+                    
+                    <div className="user-details-right">
+                        <div className="user-details-field">
+                            <label className="user-details-label">Username</label>
+                            <div className="user-details-value">{data.username || 'Not set'}</div>
+                        </div>
+                        
+                        <div className="user-details-field">
+                            <label className="user-details-label">Email ID</label>
+                            <div className="user-details-value">{data.email || 'Not set'}</div>
+                        </div>
+                        
+                        <div className="user-details-field">
+                            <label className="user-details-label">Phone Number</label>
+                            <div className="user-details-value">{data.phone_no || 'Not set'}</div>
+                        </div>
                     </div>
                 </div>
-                <div className="right">
-                    <label htmlFor="username">Username:</label>
-                    <div>{data.username}</div>
-                    <label htmlFor="username">Email ID:</label>
-                    <div>{data.email}</div>
-                    <label htmlFor="username">Phone No:</label>
-                    <div>{data.phone_no}</div>
-                    <span className="buttons">
-                        <button onClick={() => navigate('/update-user')}>Update</button>
-                        <button className='delete-button' onClick={() => navigate('/delete-user')}>Delete</button>
-                    </span>
+                
+                <div className="user-details-actions">
+                    <button 
+                        className="user-details-btn user-details-btn-primary" 
+                        onClick={() => navigate('/update-user')}
+                    >
+                        Update Profile
+                    </button>
+                    <button 
+                        className="user-details-btn user-details-btn-danger" 
+                        onClick={() => navigate('/delete-user')}
+                    >
+                        Delete Account
+                    </button>
                 </div>
+                
+                <button 
+                    className="user-details-btn user-details-btn-success todo-list-btn" 
+                    onClick={() => navigate('/todo-list')}
+                >
+                    Open Todo List
+                </button>
             </div>
-            <button onClick={() => navigate('/todo-list')}>Open Todo List</button>
         </div>
     );
 }
